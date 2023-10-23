@@ -19,7 +19,9 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@redux": ["./src/redux"],
+      "@utils": ["./src/utils"],
+      "@blockchain": ["./src/blockchain"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
