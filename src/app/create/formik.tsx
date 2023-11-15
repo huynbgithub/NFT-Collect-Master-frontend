@@ -6,11 +6,13 @@ import { useSelector } from "react-redux"
 import { RootState } from "@redux"
 
 interface FormikValues {
-    bigImage: File | null
+    bigImage: File | null,
+    cutImages: ArrayBuffer[]
 }
 
 const initialValues: FormikValues = {
-    bigImage: null
+    bigImage: null,
+    cutImages: []
 }
 
 export const FormikPropsContext =

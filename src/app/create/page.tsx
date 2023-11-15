@@ -1,6 +1,7 @@
 import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/react";
 import FormikProviders from "./formik";
 import { BigImage, ImportInput } from "./_components";
+import CropImage from "./_components/CropImage";
 
 export default function Page() {
   return (
@@ -12,8 +13,9 @@ export default function Page() {
       <CardBody>
       <BigImage/>
       </CardBody>
-      <CardFooter className="p-5">
+      <CardFooter className="p-5 gap-4">
         <ImportInput />
+        <CropImage />
       </CardFooter>
       </FormikProviders>
     </Card>
