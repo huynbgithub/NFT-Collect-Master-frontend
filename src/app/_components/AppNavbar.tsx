@@ -35,24 +35,19 @@ const Navbar = () => {
                 />
                 <NavbarBrand>
                     <AcmeLogo />
-                    <p className="font-bold text-inherit">ACME</p>
+                    <p className="font-bold text-inherit">NFT Collect Master</p>
                 </NavbarBrand>
             </NavbarContent>
 
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
                 <NavbarItem>
-                    <Link color="foreground" href="#">
-            Features
+                    <Link color="foreground" href="/create">
+            Create Game
                     </Link>
                 </NavbarItem>
                 <NavbarItem isActive>
-                    <Link href="#" aria-current="page">
-            Customers
-                    </Link>
-                </NavbarItem>
-                <NavbarItem>
-                    <Link color="foreground" href="#">
-            Integrations
+                    <Link color="foreground" href="/gameList">
+            Game List
                     </Link>
                 </NavbarItem>
             </NavbarContent>

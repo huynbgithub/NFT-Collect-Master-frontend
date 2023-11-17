@@ -9,28 +9,27 @@ import { getHttpWeb3 } from "../provider"
 import Web3, { Address } from "web3"
 import abi from "./abi"
 
-const getFactoryContract = (web3: Web3) => {
-    const factoryAddress = chainInfos[ChainName.KlaytnTestnet].factoryAddress
-    return new web3.eth.Contract(abi, factoryAddress, web3)
+const getContract = (web3: Web3, contractAddress: Address) => {
+    return new web3.eth.Contract(abi,contractAddress, web3)
 }
 
-class FactoryContract {
+class NFTContract {
     private chainName: ChainName
-    private factoryAddress: Address
+    private contractAddress: Address
     private web3?: Web3
     private sender?: Address
 
     constructor(chainName: ChainName, web3?: Web3, sender?: Address) {
         this.chainName = chainName
-        this.factoryAddress = chainInfos[this.chainName].factoryAddress
+        this.contractAddress = chainInfos[this.chainName].factoryAddress
         this.sender = sender
         this.web3 = web3
     }
 
-    async getAll(){
+    async getSingle(contractAddress: Address){
         try{
             const web3 = getHttpWeb3(this.chainName)
-            const contract = getFactoryContract(web3)
+            const contract = getContract(web3, contractAddress)
             return contract.methods.getAllBigPictures().call()
         } catch(ex){
             console.log(ex)
@@ -39,4 +38,4 @@ class FactoryContract {
     }
 }
 
-export default FactoryContract
+export default NFTContract
