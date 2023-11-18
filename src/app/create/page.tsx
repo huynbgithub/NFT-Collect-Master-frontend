@@ -1,6 +1,8 @@
-import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/react";
-import FormikProviders from "./formik";
+"use client"
+import { Button, Card, CardBody, CardFooter, CardHeader, Spacer } from "@nextui-org/react";
+import FormikProviders, { FormikPropsContext } from "./formik";
 import { BigImage, ImportInput } from "./_components";
+import InputFields from "./_components/InputFields";
 
 export default function Page() {
   return (
@@ -10,11 +12,18 @@ export default function Page() {
         <div className="text-lg font-bold">CREATE GAME</div>
       </CardHeader>
       <CardBody>
-      <BigImage/>
-      </CardBody>
-      <CardFooter className="p-5 gap-4">
+        <div className="grid grid-cols-2 gap-6">
+        <BigImage/>
+        <div>
+        <InputFields/>
+        <Spacer y={4}/>
+        <div className="gap-4 flex">
         <ImportInput />
-      </CardFooter>
+        <Button type="submit" color="warning"> Create </Button>
+        </div>
+        </div>  
+        </div> 
+      </CardBody>
       </FormikProviders>
     </Card>
   )

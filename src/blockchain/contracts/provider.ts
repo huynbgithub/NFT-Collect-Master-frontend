@@ -1,8 +1,7 @@
 import Web3, { HttpProvider, WebSocketProvider } from "web3"
-import { ChainName, chainInfos } from "../config"
+import { KLAYTN_TESTNET_HTTP_RPC_URL } from "../config"
 
 export const getHttpWeb3 = (
-    chainName: ChainName, 
     controller?: AbortController
 ) : Web3 => {
     const providerOptions = controller
@@ -12,11 +11,6 @@ export const getHttpWeb3 = (
             }
         } : undefined
     
-    const provider = new HttpProvider(chainInfos[chainName].httpRpcUrl, providerOptions)
-    return new Web3(provider)
-}
-
-export const getWebsocketWeb3 = (chainName: ChainName) : Web3 => {
-    const provider = new WebSocketProvider((chainInfos[chainName].websocketRpcUrl))
+    const provider = new HttpProvider(KLAYTN_TESTNET_HTTP_RPC_URL, providerOptions)
     return new Web3(provider)
 }

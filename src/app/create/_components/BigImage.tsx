@@ -11,7 +11,7 @@ export default function BigImage() {
   const formik = useContext(FormikPropsContext);
   if (formik == null) return;
 
-  console.log(formik.values.bigImage)
+  console.log(formik.values)
   const [imageBlobUrls, setImageBlobUrls] = useState<string[]>([])
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export default function BigImage() {
     handleEffect();
   }, [formik.values.bigImage]);
 
-  return <div className="grid grid-cols-3 gap-3"> 
+  return <div className="grid grid-cols-3 gap-3 justify-center justify-items-center"> 
     {
       imageBlobUrls.map((image, index) => <Image isZoomed radius="sm" className="w-full h-full"  key={index} src={image} alt="cutImage"/>)
     }

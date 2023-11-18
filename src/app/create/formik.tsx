@@ -4,15 +4,21 @@ import React, { ReactNode, createContext } from "react"
 import * as Yup from "yup"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
+import { FactoryContract } from "../../blockchain/contracts"
+import { uploadArrayBuffer, uploadImage } from "../../firebase/storage"
 
 interface FormikValues {
     bigImage: File | null,
-    cutImages: ArrayBuffer[]
+    cutImages: ArrayBuffer[],
+    name: string,
+    reward: number,
 }
 
 const initialValues: FormikValues = {
     bigImage: null,
-    cutImages: []
+    cutImages: [],
+    name: "",
+    reward: 0
 }
 
 export const FormikPropsContext =
@@ -36,12 +42,38 @@ const FormikProviders = ({ children }: { children: ReactNode }) => {
     return (
         <Formik
             initialValues={initialValues}
-            validationSchema={Yup.object({
-                bigImage: Yup.object().required()
-            })}
             onSubmit={
                 async (values) => {
-                    console.log(values)
+                    console.log("called")
+                    if (web3 == null) return 
+                    if (account == null) return 
+                    console.log("called 12")
+                    const contract = new FactoryContract(web3, account)
+
+                    const bigImage = values.bigImage
+                    if (bigImage == null) return
+                    const _bigPictureUrl = await uploadImage(bigImage)
+                    
+                    const cutImages = values.cutImages
+                    const urls: string[] = []
+                    const cutImagePromises: Promise<number>[] = []
+                    for (let i = 0; i < cutImages.length; i++){
+                        const _cutImageUrlPromise =  uploadArrayBuffer(cutImages[i], i).then(url => urls.push(url))
+                        cutImagePromises.push(_cutImageUrlPromise)
+                    }
+
+                    await Promise.all(cutImagePromises)
+
+
+                    console.log(_bigPictureUrl)
+                    console.log(urls)
+                    const receipt = await contract.createBigPicture(
+                        values.name,
+                        _bigPictureUrl,
+                        urls,
+                        BigInt(values.reward)
+                    )
+                    console.log(receipt)
                 }}
         >
             {(props) => _renderBody(props, children)}

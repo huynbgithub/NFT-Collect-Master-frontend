@@ -21,7 +21,8 @@
     "paths": {
       "@redux": ["./src/redux"],
       "@utils": ["./src/utils"],
-      "@blockchain": ["./src/blockchain"]
+      "@blockchain": ["./src/blockchain"],
+      "@firebase": ["./src/firebase"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

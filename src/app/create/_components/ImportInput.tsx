@@ -26,7 +26,7 @@ export default function ImportInput(){
 
         formik.setFieldValue("bigImage", file)
     }}/>
-    <Button onClick={handleButtonClick} isIconOnly> <PhotoIcon className="w-8 h-8"/> </Button>
+    <Button onClick={handleButtonClick}  color="warning" variant="bordered"> Import </Button>
     </>
     )   
 
