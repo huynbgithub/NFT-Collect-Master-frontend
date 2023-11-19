@@ -4,14 +4,13 @@ import { Image } from "@nextui-org/react";
 import { FormikPropsContext } from "../formik";
 import { useContext, useEffect, useState } from "react";
 import { createImageBlobUrl } from "@utils";
-import { splitImage } from "../../../utils/data/image.utils";
+// import { splitImage } from "../../../utils/data/image.utils";
 import axios from "axios";
 
 export default function BigImage() {
   const formik = useContext(FormikPropsContext);
   if (formik == null) return;
 
-  console.log(formik.values)
   const [imageBlobUrls, setImageBlobUrls] = useState<string[]>([])
 
   useEffect(() => {
@@ -20,7 +19,6 @@ export default function BigImage() {
 
     const handleEffect = async () => {
       const data = await bigImage.arrayBuffer();
-      console.log(data)
       const images = (await axios.post("/create/api", data)).data.images as ImageCut[]
       const _images : ArrayBuffer[] = []
 
