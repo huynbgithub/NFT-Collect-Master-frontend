@@ -1,6 +1,6 @@
 "use client"
 import React from "react"
-import {Navbar as NextUINavbar, NavbarBrand, NavbarContent, NavbarItem, Link, NavbarMenu, NavbarMenuItem, NavbarMenuToggle} from "@nextui-org/react"
+import { Navbar as NextUINavbar, NavbarBrand, NavbarContent, NavbarItem, Link, NavbarMenu, NavbarMenuItem, NavbarMenuToggle } from "@nextui-org/react"
 import { AcmeLogo } from "./AcmeLogo"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
@@ -8,46 +8,26 @@ import ConnectWalletButton from "./ConnectWalletButton"
 import ConnectedWalletSelect from "./ConnectedWalletSelect"
 
 const Navbar = () => {
-    const [isMenuOpen, setIsMenuOpen] = React.useState(false)
     const account = useSelector((state: RootState) => state.blockchain.account)
 
-    const _menuItems = [
-        {
-            key: 0,
-            value: "Profile"
-        },
-        {
-            key: 0,
-            value: "Log Out"
-        },
-
-
-    ]
-
-    const _color = (index: number) => index === _menuItems.length - 1 ? "danger" : "foreground"
-
     return (
-        <NextUINavbar shouldHideOnScroll isBordered onMenuOpenChange={setIsMenuOpen}>
+        <NextUINavbar shouldHideOnScroll isBordered>
             <NavbarContent>
-                <NavbarMenuToggle
-                    aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-                    className="sm:hidden"
-                />
                 <NavbarBrand>
                     <AcmeLogo />
-                    <p className="font-bold text-inherit">NFT Collect Master</p>
+                    <p className="font-bold text-black">NFT Collect Master</p>
                 </NavbarBrand>
             </NavbarContent>
 
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
                 <NavbarItem>
                     <Link color="foreground" href="/create">
-            Create Game
+                        Create Game
                     </Link>
                 </NavbarItem>
-                <NavbarItem isActive>
+                <NavbarItem>
                     <Link color="foreground" href="/gameList">
-            Game List
+                        Game List
                     </Link>
                 </NavbarItem>
             </NavbarContent>
@@ -55,25 +35,9 @@ const Navbar = () => {
                 {
                     account == ""
                         ? <ConnectWalletButton />
-                        : <ConnectedWalletSelect /> 
+                        : <ConnectedWalletSelect />
                 }
             </NavbarContent>
-            <NavbarMenu>
-                {_menuItems.map((_item) => (
-                    <NavbarMenuItem key={_item.key}>
-                        <Link
-                            color={
-                                _item.key === 2 ? "primary" : _color(_item.key)
-                            }
-                            className="w-full"
-                            href="#"
-                            size="lg"
-                        >
-                            {_item.value}
-                        </Link>
-                    </NavbarMenuItem>
-                ))}
-            </NavbarMenu>
         </NextUINavbar>
     )
 }

@@ -1,7 +1,3 @@
-import {
-    GAS_LIMIT,
-    GAS_PRICE,
-} from "../../config"
 import { getHttpWeb3 } from "../provider"
 
 import Web3, { Address } from "web3"
@@ -24,7 +20,12 @@ class NFTContract {
         try{
             const web3 = getHttpWeb3()
             const contract = getContract(web3, contractAddress)
-            return contract.methods.getAllBigPictures().call()
+            return contract.methods.getSingleBigPicture().call() as Promise<{
+                name: string;
+                image: string;
+                picturePieces: string[];
+                rewardPrice: number;
+            }>
         } catch(ex){
             console.log(ex)
             return null

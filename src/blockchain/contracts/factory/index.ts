@@ -28,7 +28,7 @@ class FactoryContract {
         try{
             const web3 = getHttpWeb3()
             const contract = getFactoryContract(web3)
-            return contract.methods.getAllBigPictures().call()
+            return contract.methods.getAllBigPictures().call() as Promise<[]>
         } catch(ex){
             console.log(ex)
             return null
