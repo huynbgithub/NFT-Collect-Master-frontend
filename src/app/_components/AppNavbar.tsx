@@ -6,9 +6,15 @@ import { useSelector } from "react-redux"
 import { RootState } from "@redux"
 import ConnectWalletButton from "./ConnectWalletButton"
 import ConnectedWalletSelect from "./ConnectedWalletSelect"
+import { useRouter } from "next/navigation"
 
 const Navbar = () => {
     const account = useSelector((state: RootState) => state.blockchain.account)
+
+    const router = useRouter()
+
+    const _pushCreate = () => router.push("/create")
+    const _pushList = () => router.push("/gameList")
 
     return (
         <NextUINavbar shouldHideOnScroll isBordered>
@@ -21,12 +27,12 @@ const Navbar = () => {
 
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
                 <NavbarItem>
-                    <Link color="foreground" href="/create">
+                    <Link color="foreground" className="cursor-pointer" onPress={_pushCreate}>
                         Create Game
                     </Link>
                 </NavbarItem>
                 <NavbarItem>
-                    <Link color="foreground" href="/gameList">
+                    <Link color="foreground" className="cursor-pointer" onPress={_pushList}>
                         Game List
                     </Link>
                 </NavbarItem>

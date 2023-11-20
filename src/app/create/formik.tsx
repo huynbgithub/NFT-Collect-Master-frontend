@@ -22,7 +22,7 @@ const initialValues: FormikValues = {
 }
 
 export const FormikPropsContext =
-  createContext<FormikProps<FormikValues> | null>(null)
+    createContext<FormikProps<FormikValues> | null>(null)
 
 const _renderBody = (
     props: FormikProps<FormikValues> | null,
@@ -44,21 +44,23 @@ const FormikProviders = ({ children }: { children: ReactNode }) => {
             initialValues={initialValues}
             onSubmit={
                 async (values) => {
-                    if (web3 == null) return 
-                    if (account == null) return 
+                    if (web3 == null) return
+                    if (account == null) return
                     const contract = new FactoryContract(web3, account)
 
                     const bigImage = values.bigImage
                     if (bigImage == null) return
                     const _bigPictureUrl = await uploadImage(bigImage)
-                    
+
                     const cutImages = values.cutImages
                     const _urls: string[] = []
 
-                    for (let i = 0; i < cutImages.length; i++){
+                    for (let i = 0; i < cutImages.length; i++) {
                         const url = await uploadArrayBuffer(cutImages[i], i)
                         _urls.push(url)
                     }
+
+                    console.log(_urls)
 
                     const receipt = await contract.createBigPicture(
                         values.name,
