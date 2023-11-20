@@ -1,7 +1,7 @@
 "use client"
 import { Input, Button, Spacer, Card, CardBody, CardFooter, CardHeader, Link, Image } from "@nextui-org/react";
 import React, { useState, useEffect } from "react";
-import { NFTContract } from "../../blockchain/contracts"
+import { NFTContract } from "../../../blockchain/contracts"
 import { useParams } from "next/navigation"
 
 export default function Page() {

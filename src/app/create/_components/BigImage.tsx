@@ -20,32 +20,32 @@ export default function BigImage() {
     const handleEffect = async () => {
       const data = await bigImage.arrayBuffer();
       const images = (await axios.post("/create/api", data)).data.images as ImageCut[]
-      const _images : ArrayBuffer[] = []
+      const _images: ArrayBuffer[] = []
 
-      images.forEach(image => { 
+      images.forEach(image => {
         _images.push(arrayToBuffer(image.data))
-     });
+      });
 
-       formik.setFieldValue("cutImages", _images)
-      
+      formik.setFieldValue("cutImages", _images)
 
-       const blobImages : string[] = [] 
-       _images.forEach(image => {
-         const _image = createImageBlobUrl(image) as string
-         blobImages.push(_image)
-       })
 
-     setImageBlobUrls(blobImages)
+      const blobImages: string[] = []
+      _images.forEach(image => {
+        const _image = createImageBlobUrl(image) as string
+        blobImages.push(_image)
+      })
+
+      setImageBlobUrls(blobImages)
     };
 
     handleEffect();
   }, [formik.values.bigImage]);
 
-  return <div className="grid grid-cols-3 gap-3 justify-center justify-items-center"> 
+  return <div className="grid grid-cols-3 gap-3 justify-center justify-items-center">
     {
-      imageBlobUrls.map((image, index) => <Image isZoomed radius="sm" className="w-full h-full"  key={index} src={image} alt="cutImage"/>)
+      imageBlobUrls.map((image, index) => <Image isZoomed radius="sm" className="w-full h-full" key={index} src={image} alt="cutImage" />)
     }
-   </div>
+  </div>
 }
 
 export interface ImageCut {

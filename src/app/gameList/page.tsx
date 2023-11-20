@@ -24,7 +24,7 @@ export default function Page() {
       </CardHeader>
       <CardBody>
         {games && games.map((game) => (
-          <Link color="foreground" href={`/${game}`}>
+          <Link color="foreground" href={`/game/${game}`}>
             {game}
           </Link>
         ))}
