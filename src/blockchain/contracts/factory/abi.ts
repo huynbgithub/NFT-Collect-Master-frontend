@@ -107,6 +107,46 @@ const abi = [
 	},
 	{
 		"inputs": [],
+		"name": "getAllBigPictureDatas",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "bigPictureAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "image",
+						"type": "string"
+					},
+					{
+						"internalType": "string[]",
+						"name": "picturePieces",
+						"type": "string[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "rewardPrice",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct BigPictureData[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "getAllBigPictures",
 		"outputs": [
 			{
