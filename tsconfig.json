@@ -22,7 +22,9 @@
       "@redux": ["./src/redux"],
       "@utils": ["./src/utils"],
       "@blockchain": ["./src/blockchain"],
-      "@firebase": ["./src/firebase"]
+      "@firebase": ["./src/firebase"],
+      "@3rd": ["./src/3rd"],
+      "@api": ["./src/api"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

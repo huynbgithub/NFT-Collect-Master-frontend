@@ -6,6 +6,7 @@ import { useSelector } from "react-redux"
 import { RootState } from "@redux"
 import { FactoryContract } from "../../blockchain/contracts"
 import { uploadArrayBuffer, uploadImage } from "../../firebase/storage"
+import { pinataPOSTArrayBuffer, pinataPOSTFile } from "../../api"
 
 interface FormikValues {
     bigImage: File | null,
@@ -50,24 +51,27 @@ const FormikProviders = ({ children }: { children: ReactNode }) => {
 
                     const bigImage = values.bigImage
                     if (bigImage == null) return
-                    const _bigPictureUrl = await uploadImage(bigImage)
+                    const _bigPictureRes = await pinataPOSTFile(bigImage)
+                    if (_bigPictureRes == null) return
+                    const _bigPictureUrl = _bigPictureRes.IpfsHash
 
                     const cutImages = values.cutImages
                     const _urls: string[] = []
 
                     for (let i = 0; i < cutImages.length; i++) {
-                        const url = await uploadArrayBuffer(cutImages[i], i)
-                        _urls.push(url)
+                        const _cutImageRes = await pinataPOSTArrayBuffer(cutImages[i])
+                        if (_cutImageRes == null) return
+                        _urls.push(_cutImageRes.IpfsHash)
                     }
-
-                    console.log(_urls)
-
+                    
                     const receipt = await contract.createBigPicture(
                         values.name,
                         _bigPictureUrl,
                         _urls,
                         BigInt(values.reward)
                     )
+
+                    console.log(receipt)
                 }}
         >
             {(props) => _renderBody(props, children)}
