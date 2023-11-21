@@ -5,6 +5,7 @@ import { NFTContract } from "../../../blockchain/contracts"
 import { useParams } from "next/navigation"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
+import { OwnToken } from "../../../blockchain/contracts/nft";
 
 export default function Page() {
 
@@ -15,8 +16,6 @@ export default function Page() {
 
     const address = params.id as string
 
-    const contract = new NFTContract()
-
     const [game, setGame] = useState<{
         address: string;
         name: string;
@@ -25,56 +24,69 @@ export default function Page() {
         rewardPrice: number;
     } | null>(null);
 
-    const [tokens, setTokens] = useState<[] | null | undefined>(null);
+    const [tokens, setTokens] = useState<OwnToken[] | null>(null);
 
     useEffect(() => {
-        loadGame();
-        loadYourTokens();
+        if (account == null) return
+        const handleEffect = async () => {
+            if (web3 == null) return
+            const contract = new NFTContract(web3, account)
+            const tokensData = await contract.getYourTokens(address)
+            setTokens(tokensData);
+            console.log(tokensData)
+        }
+        handleEffect()
     }, [account]);
 
-    async function loadGame() {
+    useEffect(() => {
+        const handleEffect = async () => {
+        const contract = new NFTContract()
         const gameData = await contract.getSingle(address)
         setGame(gameData);
-    }
-
-    async function loadYourTokens() {
-        const tokensData = await contract.getYourTokens(address)
-        setTokens(tokensData);
-    }
+        }
+        handleEffect()
+    }, [])
 
     return (
         <Card>
             <CardHeader className="p-5">
-                <div className="text-lg font-bold">GAME DETAIL</div>
+                <div className="text-lg font-bold">{game?.name}</div>
             </CardHeader>
             <CardBody>
                 <div className="grid grid-cols-2 gap-6">
+                    <div className="flex flex-col">
                     <div className="grid grid-cols-3 gap-3 justify-center justify-items-center">
                         {
                             game?.picturePieces.map((image, index) => <Image isZoomed radius="sm" className="w-full h-full" key={index} src={image} alt="cutImage" />)
                         }
                     </div>
-                    <div>
-                        <div className="flex flex-col gap-4">
-                            <Input label="Name" title="Name" id="name" value={game?.name} />
-                            {/* <Input label="Reward" title="Reward" id="reward" value={game?.rewardPrice} onChange={ }> */}
-                        </div>
-                        <Spacer y={4} />
-                        <div className="gap-4 flex">
-                            <Button type="submit" color="warning"
+                    <Button className="mt-4 grow" type="submit" color="warning"
                                 onClick={async () => {
                                     if (web3 == null) return
                                     if (account == null) return
-                                    if (game?.address == null) return
+                                    //const address = address
+                                    console.log(address)
+                                    if (address == null) return
                                     const contract = new NFTContract(web3, account)
-                                    const receipt = await contract.mintCMT(game?.address)
+                                    const receipt = await contract.mintCMT(address)
+                                    console.log(receipt)
                                 }
 
                                 }> Mint CMT Token </Button>
                         </div>
+                    <div>
+                    </div>
+                        <div className="flex flex-col gap-4">
+                            
+                            {/* <Input label="Reward" title="Reward" id="reward" value={game?.rewardPrice} onChange={ }> */}
+                        </div>
+                        <Spacer y={4} />
+                        <div className="gap-4 flex">
+                           
                         <div className="grid grid-cols-4 gap-4">
                             {tokens && tokens.map((token) => (
                                 <Card
+                                    key={token}
                                     isFooterBlurred
                                     radius="lg"
                                     className="border-none"

@@ -24,11 +24,11 @@ class FactoryContract {
         this.web3 = web3
     }
 
-    async getAll(){
+    async getAll() : Promise<NFT[] | null>{
         try{
             const web3 = getHttpWeb3()
             const contract = getFactoryContract(web3)
-            return contract.methods.getAllBigPictureDatas().call() as Promise<[]>
+            return await contract.methods.getAllBigPictureDatas().call()
         } catch(ex){
             console.log(ex)
             return null
@@ -60,3 +60,11 @@ class FactoryContract {
 }
 
 export default FactoryContract
+
+export interface NFT {
+        bigPictureAddress: string;
+        name: string;
+        image: string;
+        picturePieces: string[];
+        rewardPrice: bigint;
+}

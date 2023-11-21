@@ -37,12 +37,12 @@ class NFTContract {
         }
     }
 
-    async getYourTokens(contractAddress: Address){
+    async getYourTokens(contractAddress: Address) : Promise<OwnToken[] | null>{
         try{
             const web3 = getHttpWeb3()
             const contract = getContract(web3, contractAddress)
-            if (this.sender == null) return
-            return contract.methods.getYourTokens(this.sender).call() as Promise<[]>
+            if (this.sender == null) return null
+            return await contract.methods.getYourTokens(this.sender).call()
         } catch(ex){
             console.log(ex)
             return null
@@ -71,3 +71,8 @@ class NFTContract {
 }
 
 export default NFTContract
+
+export interface OwnToken {
+    id: bigint,
+    imageUrl: string
+}

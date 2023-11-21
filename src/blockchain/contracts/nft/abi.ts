@@ -676,7 +676,7 @@ const abi = [
 				}
 			],
 			"stateMutability": "view",
-			"type": "function"
+			"type": "function"  
 		},
 		{
 			"inputs": [],
