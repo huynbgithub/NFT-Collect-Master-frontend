@@ -35,14 +35,14 @@ class FactoryContract {
         }
     }
 
-    async createBigPicture(name: string, bigImageUrl: string, cutImageUrls: string[], reward: bigint){
+    async createBigPicture(name: string, bigImageUrl: string, cutImageUrls: string[], mintPrice: bigint, reward: bigint){
         try{
             if (this.web3 == null) return 
             if (this.sender == null) return
             const contract = getFactoryContract(this.web3)
 
             const data = contract.methods
-                .createBigPicture(name, bigImageUrl, cutImageUrls, reward)
+                .createBigPicture(name, bigImageUrl, cutImageUrls, mintPrice, reward)
                 .encodeABI()
 
             return await this.web3.eth.sendTransaction({
@@ -66,5 +66,6 @@ export interface NFT {
         name: string;
         image: string;
         picturePieces: string[];
+        mintPrice: bigint;
         rewardPrice: bigint;
 }

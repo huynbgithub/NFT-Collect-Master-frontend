@@ -7,11 +7,13 @@ import { RootState } from "@redux"
 import { FactoryContract } from "../../blockchain/contracts"
 import { uploadArrayBuffer, uploadImage } from "../../firebase/storage"
 import { pinataPOSTArrayBuffer, pinataPOSTFile } from "../../api"
+import { calculateIRedenomination } from "../../utils/math"
 
 interface FormikValues {
     bigImage: File | null,
     cutImages: ArrayBuffer[],
     name: string,
+    mintPrice: number,
     reward: number,
 }
 
@@ -19,6 +21,7 @@ const initialValues: FormikValues = {
     bigImage: null,
     cutImages: [],
     name: "",
+    mintPrice: 0,
     reward: 0
 }
 
@@ -56,19 +59,26 @@ const FormikProviders = ({ children }: { children: ReactNode }) => {
                     const _bigPictureUrl = _bigPictureRes.IpfsHash
 
                     const cutImages = values.cutImages
-                    const _urls: string[] = []
+                    const _urls: {index: number, url: string}[] = []
 
+                    const pinataPOSTArrayBufferPromises : Promise<void>[] = [] 
                     for (let i = 0; i < cutImages.length; i++) {
-                        const _cutImageRes = await pinataPOSTArrayBuffer(cutImages[i])
-                        if (_cutImageRes == null) return
-                        _urls.push(_cutImageRes.IpfsHash)
+                        pinataPOSTArrayBufferPromises.push(pinataPOSTArrayBuffer(cutImages[i])
+                        .then(_cutImageRes => {
+                            if (_cutImageRes == null) return 
+                             _urls.push({index: i, url: _cutImageRes.IpfsHash})
+                        })
+                        )
                     }
+                    await Promise.all(pinataPOSTArrayBufferPromises)
                     
+                    const __urls = _urls.sort((prev, next) => prev.index - next.index).map(item => item.url)
                     const receipt = await contract.createBigPicture(
                         values.name,
                         _bigPictureUrl,
-                        _urls,
-                        BigInt(values.reward)
+                        __urls,
+                        calculateIRedenomination(values.mintPrice, 18),
+                        calculateIRedenomination(values.reward, 18)
                     )
 
                     console.log(receipt)

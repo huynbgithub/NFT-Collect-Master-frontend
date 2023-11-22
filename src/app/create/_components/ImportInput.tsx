@@ -5,7 +5,11 @@ import { Button } from "@nextui-org/react"
 import { FormikContext } from "formik"
 import { ChangeEvent, useContext, useRef } from "react"
 
-export default function ImportInput(){
+interface ImportInputProps{
+  className?: string
+}
+
+export default function ImportInput(props :ImportInputProps){
     const formik = useContext(FormikContext)
     const fileInputRef = useRef<HTMLInputElement>(null);
   

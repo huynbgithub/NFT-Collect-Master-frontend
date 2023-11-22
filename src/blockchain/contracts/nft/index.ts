@@ -42,7 +42,13 @@ class NFTContract {
             const web3 = getHttpWeb3()
             const contract = getContract(web3, contractAddress)
             if (this.sender == null) return null
-            return await contract.methods.getYourTokens(this.sender).call()
+            const _res = await contract.methods.getYourTokens(this.sender).call()
+            return _res.map(a => {
+                return {
+                id: BigInt(a.id),
+                    image: a.image
+            }
+            })
         } catch(ex){
             console.log(ex)
             return null
@@ -55,11 +61,12 @@ class NFTContract {
             if (this.sender == null) return
             const contract = getContract(this.web3, contractAddress)
             const data = contract.methods.mintCMT().encodeABI()
-
+            const value = await contract.methods.mintPrice().call() as  bigint
             return await this.web3.eth.sendTransaction({
                 from: this.sender,
                 to: contractAddress,
                 data,
+                value,
                 gasLimit: GAS_LIMIT,
                 gasPrice: GAS_PRICE,
             })
@@ -74,5 +81,5 @@ export default NFTContract
 
 export interface OwnToken {
     id: bigint,
-    imageUrl: string
+    image: string
 }

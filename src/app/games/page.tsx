@@ -5,6 +5,8 @@ import { FactoryContract } from "../../blockchain/contracts"
 import { usePathname, useRouter } from "next/navigation"
 import { NFT } from "../../blockchain/contracts/factory";
 import { calculateRedenomination } from "../../utils/math";
+import { getIpfsImageBlobUrl } from "../../api/next";
+import { Address } from "web3";
 
 export default function Page() {
   const path = usePathname()
@@ -12,16 +14,38 @@ export default function Page() {
 
   const contract = new FactoryContract()
 
-  const [games, setGames] = useState<NFT[] | null>(null);
+  const [games, setGames] = useState<RenderNFT[]>([]);
 
   useEffect(() => {
     loadGames();
   }, []);
 
   async function loadGames() {
-    const gamesData = await contract.getAll()
-    console.log(gamesData)
-    setGames(gamesData);
+    const _gamesData = await contract.getAll()
+    if (_gamesData == null) return 
+
+    console.log(_gamesData)
+    const _games : RenderNFT[] = []
+    const promises : Promise<void>[] = []
+    for (const data of _gamesData){
+      const promise = getIpfsImageBlobUrl(data.image).then(
+        url => {
+          console.log(url)
+          if (url == null) return
+          _games.push({
+          imgUrl: url,
+          mintPrice: calculateRedenomination(data.mintPrice, 18, 3),
+          reward: calculateRedenomination(data.rewardPrice, 18, 3),
+          name: data.name,
+          address: data.bigPictureAddress
+          }
+        )
+        }
+      )
+      promises.push(promise)
+    }
+    await Promise.all(promises)
+    setGames(_games)
   }
 
   return (
@@ -38,15 +62,15 @@ export default function Page() {
                    shadow="sm"
                    radius="lg"
                    width="100%"
-                   alt={game.image}
+                   alt={game.imgUrl}
                    className="w-full object-cover h-[200px]"
-                   src={game.image}
-                   onClick={() => router.push(`${path}/${game.bigPictureAddress}`)}
+                   src={game.imgUrl}
+                   onClick={() => router.push(`${path}/${game.address}`)}
                  />
                </CardBody>
                <CardFooter className="text-small justify-between">
                  <b>{game.name}</b>
-                 <p className="text-default-500">{calculateRedenomination(game.rewardPrice, 18, 3)}</p>
+                 <p className="text-default-500">{game.reward}</p>
                </CardFooter>
              </Card>
           ))}
@@ -56,4 +80,12 @@ export default function Page() {
       </CardFooter>
     </Card>
   )
+}
+
+export interface RenderNFT{
+  name: string,
+  imgUrl: string,
+  mintPrice: number,
+  reward: number,
+  address: Address
 }

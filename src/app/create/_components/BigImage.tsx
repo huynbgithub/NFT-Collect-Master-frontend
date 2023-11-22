@@ -11,11 +11,13 @@ export default function BigImage() {
   const formik = useContext(FormikPropsContext);
   if (formik == null) return;
 
-  const [imageBlobUrls, setImageBlobUrls] = useState<string[]>([])
+  const [imageBlobUrl, setImageBlobUrl] = useState("")
 
   useEffect(() => {
-    const bigImage = formik.values.bigImage;
+    const bigImage = formik.values.bigImage;   
     if (bigImage == null) return;
+
+    setImageBlobUrl(URL.createObjectURL(bigImage))
 
     const handleEffect = async () => {
       const data = await bigImage.arrayBuffer();
@@ -25,27 +27,13 @@ export default function BigImage() {
       images.forEach(image => {
         _images.push(arrayToBuffer(image.data))
       });
-
+    
       formik.setFieldValue("cutImages", _images)
-
-
-      const blobImages: string[] = []
-      _images.forEach(image => {
-        const _image = createImageBlobUrl(image) as string
-        blobImages.push(_image)
-      })
-
-      setImageBlobUrls(blobImages)
-    };
-
+    }
     handleEffect();
   }, [formik.values.bigImage]);
 
-  return <div className="grid grid-cols-3 gap-3 justify-center justify-items-center">
-    {
-      imageBlobUrls.map((image, index) => <Image isZoomed radius="sm" className="w-full h-full" key={index} src={image} alt="cutImage" />)
-    }
-  </div>
+  return <Image isZoomed radius="sm" className="w-full h-full" key={imageBlobUrl} src={imageBlobUrl} alt="cutImage" />
 }
 
 export interface ImageCut {

@@ -14,7 +14,7 @@ const Navbar = () => {
     const router = useRouter()
 
     const _pushCreate = () => router.push("/create")
-    const _pushList = () => router.push("/gameList")
+    const _pushList = () => router.push("/games")
 
     return (
         <NextUINavbar shouldHideOnScroll isBordered>
@@ -28,12 +28,12 @@ const Navbar = () => {
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
                 <NavbarItem>
                     <Link color="foreground" className="cursor-pointer" onPress={_pushCreate}>
-                        Create Game
+                        Create
                     </Link>
                 </NavbarItem>
                 <NavbarItem>
                     <Link color="foreground" className="cursor-pointer" onPress={_pushList}>
-                        Game List
+                        Games
                     </Link>
                 </NavbarItem>
             </NavbarContent>

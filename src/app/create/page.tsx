@@ -6,23 +6,22 @@ import InputFields from "./_components/InputFields";
 
 export default function Page() {
   return (
-    <Card>
+    <Card className="max-w-[500px] mx-auto">
       <FormikProviders>
         <CardHeader className="p-5">
-          <div className="text-lg font-bold">CREATE GAME</div>
+          <div className="text-lg w-full font-bold text-center">CREATE GAME</div>
         </CardHeader>
         <CardBody>
-          <div className="grid grid-cols-2 gap-6">
+          <div>
             <BigImage />
-            <div>
+              <Spacer y={4} />
               <InputFields />
               <Spacer y={4} />
-              <div className="gap-4 flex">
-                <ImportInput />
+              <div className="gap-6 grid grid-cols-2">
+                <ImportInput/>
                 <Button type="submit" color="warning"> Create </Button>
               </div>
             </div>
-          </div>
         </CardBody>
       </FormikProviders>
     </Card>
