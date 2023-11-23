@@ -16,7 +16,7 @@ import { useParams } from "next/navigation";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux";
 import { OwnToken } from "../../../../blockchain/contracts/nft";
-import { getIpfsImageBlobUrl } from "../../../../api/next";
+import { buildIpfsUrl, getIpfsImageBlobUrl, getIpfsJson } from "../../../../api/next";
 import { Address } from "web3";
 
 interface AllProps{
@@ -38,11 +38,15 @@ export default function All(props: AllProps) {
       const promises: Promise<void>[] = [];
       for (let i = 0; i < gameData.picturePieces.length; i++) {
         const _piece = gameData.picturePieces[i];
-        const promise = getIpfsImageBlobUrl(_piece).then((_p) => {
+        const promise = getIpfsJson(_piece).then((_p) => {
           if (_p == null) return;
+          const __p = _p as {
+            index: number,
+            url: string
+          }
           pieces.push({
-            index: i,
-            url: _p,
+            index: __p.index,
+            url: __p.url,
           });
         });
         promises.push(promise);
@@ -76,15 +80,16 @@ export default function All(props: AllProps) {
                   radius="sm"
                   className="w-full h-full"
                   key={index}
-                  src={image.url}
+                  src={buildIpfsUrl(image.url)}
                   alt="cutImage"
                 />
               ))}
             </div>
-            <CardFooter className="p-0 mt-4">
+            <CardFooter className="p-0 mt-4 gap-4">
             <Button
               className="w-full"
               type="submit"
+              variant="bordered"
               color="warning"
               onClick={async () => {
                 if (web3 == null) return;
@@ -98,7 +103,25 @@ export default function All(props: AllProps) {
               }}
             >
               {" "}
-              Mint CMT Token{" "}
+              Mint{" "}
+            </Button>
+            <Button
+              className="w-full"
+              type="submit"
+              color="warning"
+              onClick={async () => {
+                if (web3 == null) return;
+                if (account == null) return;
+                const address = props.address
+                console.log(address);
+                if (address == null) return;
+                const contract = new NFTContract(web3, account);
+                const receipt = await contract.mintCMTDemo(address);
+                console.log(receipt);
+              }}
+            >
+              {" "}
+              Mint All{" "}
             </Button>
                     </CardFooter>
       </CardBody>

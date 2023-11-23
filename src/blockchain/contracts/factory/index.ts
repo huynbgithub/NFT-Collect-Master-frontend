@@ -42,7 +42,7 @@ class FactoryContract {
             const contract = getFactoryContract(this.web3)
 
             const data = contract.methods
-                .createBigPicture(name, bigImageUrl, cutImageUrls, mintPrice, reward)
+                .createBigPicture(name, bigImageUrl, cutImageUrls, reward, mintPrice)
                 .encodeABI()
 
             return await this.web3.eth.sendTransaction({

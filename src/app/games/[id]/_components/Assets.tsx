@@ -16,7 +16,7 @@ import { useParams } from "next/navigation";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux";
 import { OwnToken } from "../../../../blockchain/contracts/nft";
-import { getIpfsImageBlobUrl } from "../../../../api/next";
+import { buildIpfsUrl, getIpfsImageBlobUrl, getIpfsJson } from "../../../../api/next";
 
 export default function Page() {
   const web3 = useSelector((state: RootState) => state.blockchain.web3);
@@ -42,12 +42,18 @@ export default function Page() {
       const promises: Promise<void>[] = [];
       for (let i = 0; i < tokensData.length; i++) {
         const _data = tokensData[i];
-        const promise = getIpfsImageBlobUrl(_data.image).then((_p) => {
+        const promise = getIpfsJson(_data.image).then((_p) => {
             console.log(_p)
           if (_p == null) return;
+          const __p = _p as {
+            index: number,
+            url: string
+          }
           _tokensData.push({
-            id: BigInt(i),
-            image: _p,
+            id: BigInt(__p.index),
+            image: __p.url,
+            onSale: _data.onSale,
+            tokenPrice: _data.tokenPrice
           });
         });
         promises.push(promise);
@@ -80,11 +86,11 @@ export default function Page() {
                       alt="Woman listing to music"
                       className="object-cover"
                       height={300}
-                      src={token.image}
+                      src={buildIpfsUrl(token.image)}
                       width="100%"
                     />
-                    <CardFooter className="justify-between  border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
-                      <p className="text-tiny text-white">{Number(token.id)}</p>
+                    <CardFooter>
+                      <div><div className="font-bold">#{Number(token.id)}</div> </div>
                     </CardFooter>
                   </Card>
                 ))}

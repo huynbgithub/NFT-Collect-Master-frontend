@@ -49,7 +49,7 @@ export default function Page() {
   }
 
   return (
-    <Card>
+    <Card>  
       <CardHeader className="p-5">
         <div className="text-lg font-bold">GAME</div>
       </CardHeader>

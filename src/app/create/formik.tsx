@@ -6,7 +6,7 @@ import { useSelector } from "react-redux"
 import { RootState } from "@redux"
 import { FactoryContract } from "../../blockchain/contracts"
 import { uploadArrayBuffer, uploadImage } from "../../firebase/storage"
-import { pinataPOSTArrayBuffer, pinataPOSTFile } from "../../api"
+import { pinataPOSTArrayBuffer, pinataPOSTFile, pinataPOSTJson } from "../../api"
 import { calculateIRedenomination } from "../../utils/math"
 
 interface FormikValues {
@@ -59,24 +59,26 @@ const FormikProviders = ({ children }: { children: ReactNode }) => {
                     const _bigPictureUrl = _bigPictureRes.IpfsHash
 
                     const cutImages = values.cutImages
-                    const _urls: {index: number, url: string}[] = []
+                    const _urls: string[] = []
 
                     const pinataPOSTArrayBufferPromises : Promise<void>[] = [] 
                     for (let i = 0; i < cutImages.length; i++) {
                         pinataPOSTArrayBufferPromises.push(pinataPOSTArrayBuffer(cutImages[i])
-                        .then(_cutImageRes => {
+                        .then(async (_cutImageRes) => {
                             if (_cutImageRes == null) return 
-                             _urls.push({index: i, url: _cutImageRes.IpfsHash})
+                            const data = {index: i, url: _cutImageRes.IpfsHash}
+                            const _res = await pinataPOSTJson(data)
+                            if (_res == null) return
+                            _urls.push(_res.IpfsHash)
                         })
                         )
                     }
                     await Promise.all(pinataPOSTArrayBufferPromises)
                     
-                    const __urls = _urls.sort((prev, next) => prev.index - next.index).map(item => item.url)
                     const receipt = await contract.createBigPicture(
                         values.name,
                         _bigPictureUrl,
-                        __urls,
+                        _urls,
                         calculateIRedenomination(values.mintPrice, 18),
                         calculateIRedenomination(values.reward, 18)
                     )

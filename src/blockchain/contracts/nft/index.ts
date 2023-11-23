@@ -45,8 +45,10 @@ class NFTContract {
             const _res = await contract.methods.getYourTokens(this.sender).call()
             return _res.map(a => {
                 return {
-                id: BigInt(a.id),
-                    image: a.image
+                    id: BigInt(a.id),
+                    image: a.image,
+                    onSale: a.onSale,
+                    tokenPrice: BigInt(a.tokenPrice)
             }
             })
         } catch(ex){
@@ -54,6 +56,27 @@ class NFTContract {
             return null
         }
     }
+
+    async getTokensOnSale(contractAddress: Address) : Promise<OwnToken[] | null>{
+        try{
+            const web3 = getHttpWeb3()
+            const contract = getContract(web3, contractAddress)
+            if (this.sender == null) return null
+            const _res = await contract.methods.getTokensOnSale().call()
+            return _res.map(a => {
+                return {
+                    id: BigInt(a.id),
+                    image: a.image,
+                    onSale: a.onSale,
+                    tokenPrice: BigInt(a.tokenPrice)
+            }
+            })
+        } catch(ex){
+            console.log(ex)
+            return null
+        }
+    }
+
 
     async mintCMT(contractAddress: Address){
         try{
@@ -75,11 +98,76 @@ class NFTContract {
             return null
         }
     }
+
+    async purchaseToken(tokenId: bigint, price: bigint, contractAddress: Address){
+        try{
+            if (this.web3 == null) return 
+            if (this.sender == null) return
+            const contract = getContract(this.web3, contractAddress)
+            const data = contract.methods.purchaseToken(tokenId).encodeABI()
+            return await this.web3.eth.sendTransaction({
+                from: this.sender,
+                to: contractAddress,
+                data,
+                value : price,
+                gasLimit: GAS_LIMIT,
+                gasPrice: GAS_PRICE,
+            })
+        } catch(ex){
+            console.log(ex)
+            return null
+        }
+    }
+
+
+    async putTokenOnSale(contractAddress: Address, tokenId: bigint, price: bigint){
+        try{
+            if (this.web3 == null) return 
+            if (this.sender == null) return
+            const contract = getContract(this.web3, contractAddress)
+            const data = contract.methods.putTokenOnSale(tokenId, price).encodeABI()
+            return await this.web3.eth.sendTransaction({
+                from: this.sender,
+                to: contractAddress,
+                data,
+                gasLimit: GAS_LIMIT,
+                gasPrice: GAS_PRICE,
+            })
+        } catch(ex){
+            console.log(ex)
+            return null
+        }
+    }
+
+    async mintCMTDemo(contractAddress: Address){
+        try{
+            if (this.web3 == null) return 
+            if (this.sender == null) return
+            const contract = getContract(this.web3, contractAddress)
+            const data = contract.methods.mintCMTDemo().encodeABI()
+            //const value = await contract.methods.mintPrice().call() as  bigint
+            return await this.web3.eth.sendTransaction({
+                from: this.sender,
+                to: contractAddress,
+                data,
+                //value,
+                gasLimit: GAS_LIMIT*9,
+                gasPrice: GAS_PRICE,
+            })
+        } catch(ex){
+            console.log(ex)
+            return null
+        }
+    }
 }
 
 export default NFTContract
 
 export interface OwnToken {
     id: bigint,
-    image: string
+    tokenId?: bigint,
+    image: string,
+    onSale: boolean,
+    tokenPrice: bigint,
+    address?: Address
 }
