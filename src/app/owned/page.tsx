@@ -65,23 +65,24 @@ export default function Page() {
               };
 
               _ownedTokens.push({
-                        tokenId: token.id,
-                        id: BigInt(__p.index),
-                        image: __p.url,
-                        onSale: token.onSale,
-                        tokenPrice: token.tokenPrice,
-                        address: data.bigPictureAddress
-                    }
-            );})
+                tokenId: token.id,
+                id: BigInt(__p.index),
+                image: __p.url,
+                onSale: token.onSale,
+                tokenPrice: token.tokenPrice,
+                address: data.bigPictureAddress
+              }
+              );
+            })
             _promises.push(_promise);
           }
           await Promise.all(_promises);
 
           _ownedNFTs.push(
             {
-                nftAddress: data.bigPictureAddress,
-                nftName: data.name,
-                tokens: _ownedTokens
+              nftAddress: data.bigPictureAddress,
+              nftName: data.name,
+              tokens: _ownedTokens
             }
           )
         });
@@ -113,18 +114,18 @@ export default function Page() {
                     width="100%"
                   />
                   <CardFooter>
-                        <div className="grid gap-2 w-full">
-                        <div className="font-bold">#{Number(token.id)}</div>
-                        {token.tokenPrice.toString()}
-                        {
-                            !token.onSale ?
-                                <SellModal address={token.address as string} id={token.tokenId as bigint}/>
-                                : 
-                                <Button color="warning" variant="bordered" className="w-full"> Unsell </Button>       
-                        }
-                    
-                        </div>
-               
+                    <div className="grid gap-2 w-full">
+                      <div className="font-bold">#{Number(token.id)}</div>
+                      {token.tokenPrice.toString()}
+                      {
+                        !token.onSale ?
+                          <SellModal address={token.address as string} id={token.tokenId as bigint} />
+                          :
+                          <Button color="warning" variant="bordered" className="w-full"> Unsell </Button>
+                      }
+
+                    </div>
+
                   </CardFooter>
                 </Card>
               ))}

@@ -62,7 +62,7 @@ class NFTContract {
             const web3 = getHttpWeb3()
             const contract = getContract(web3, contractAddress)
             if (this.sender == null) return null
-            const _res = await contract.methods.getTokensOnSale().call()
+            const _res = await contract.methods.getTokensOnSale(this.sender).call()
             return _res.map(a => {
                 return {
                     id: BigInt(a.id),
@@ -104,12 +104,13 @@ class NFTContract {
             if (this.web3 == null) return 
             if (this.sender == null) return
             const contract = getContract(this.web3, contractAddress)
+            const value = price;
             const data = contract.methods.purchaseToken(tokenId).encodeABI()
             return await this.web3.eth.sendTransaction({
                 from: this.sender,
                 to: contractAddress,
                 data,
-                value : price,
+                value,
                 gasLimit: GAS_LIMIT,
                 gasPrice: GAS_PRICE,
             })

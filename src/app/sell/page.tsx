@@ -64,23 +64,24 @@ export default function Page() {
               };
 
               _ownedTokens.push({
-                        tokenId: token.id,
-                        id: BigInt(__p.index),
-                        image: __p.url,
-                        onSale: token.onSale,
-                        tokenPrice: token.tokenPrice,
-                        address: data.bigPictureAddress
-                    }
-            );})
+                tokenId: token.id,
+                id: BigInt(__p.index),
+                image: __p.url,
+                onSale: token.onSale,
+                tokenPrice: token.tokenPrice,
+                address: data.bigPictureAddress
+              }
+              );
+            })
             _promises.push(_promise);
           }
           await Promise.all(_promises);
 
           _ownedNFTs.push(
             {
-                nftAddress: data.bigPictureAddress,
-                nftName: data.name,
-                tokens: _ownedTokens
+              nftAddress: data.bigPictureAddress,
+              nftName: data.name,
+              tokens: _ownedTokens
             }
           )
         });
@@ -112,21 +113,23 @@ export default function Page() {
                     width="100%"
                   />
                   <CardFooter>
-                        <div className="grid gap-2 w-full">
-                        <div className="font-bold">#{Number(token.id)}</div>
-                        {   
-                            <Button color="warning" onPress={
-                                async () => {
-                                    if (web3 == null) return 
-                                    const nftContract = new NFTContract(web3, account)
-                                    const receipt = await nftContract.purchaseToken(token.tokenId as bigint, token.tokenPrice ,token.address as string)
-                                    console.log(receipt)
-                                }
-                            }  variant="bordered" className="w-full"> Purchase </Button>       
-                        }
-                    
-                        </div>
-               
+                    <div className="grid gap-2 w-full">
+                      <div className="font-bold">#{Number(token.id)}</div>
+                      {token.tokenPrice.toString()}
+                      {
+                        <Button color="warning" onPress={
+                          async () => {
+                            if (web3 == null) return
+                            const nftContract = new NFTContract(web3, account)
+                            console.log(token.tokenId as bigint, token.tokenPrice as bigint, token.address as string)
+                            const receipt = await nftContract.purchaseToken(token.tokenId as bigint, token.tokenPrice, token.address as string)
+                            console.log(receipt)
+                          }
+                        } variant="bordered" className="w-full"> Purchase </Button>
+                      }
+
+                    </div>
+
                   </CardFooter>
                 </Card>
               ))}

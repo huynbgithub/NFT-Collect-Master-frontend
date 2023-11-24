@@ -1,5 +1,4 @@
-const abi = 
-[
+const abi = [
 	{
 		"inputs": [
 			{
@@ -282,6 +281,19 @@ const abi =
 		"anonymous": false,
 		"inputs": [
 			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "ReceiveCalled",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
 				"indexed": true,
 				"internalType": "address",
 				"name": "from",
@@ -469,7 +481,13 @@ const abi =
 		"type": "function"
 	},
 	{
-		"inputs": [],
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "viewer",
+				"type": "address"
+			}
+		],
 		"name": "getTokensOnSale",
 		"outputs": [
 			{
@@ -625,7 +643,7 @@ const abi =
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "",
+				"name": "tokenId",
 				"type": "uint256"
 			}
 		],
@@ -708,7 +726,7 @@ const abi =
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "id",
+				"name": "tokenId",
 				"type": "uint256"
 			},
 			{
@@ -948,7 +966,7 @@ const abi =
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "",
+				"name": "tokenId",
 				"type": "uint256"
 			}
 		],
@@ -1027,6 +1045,19 @@ const abi =
 			}
 		],
 		"name": "transferOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "unSell",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
