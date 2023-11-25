@@ -107,7 +107,7 @@ const abi = [
 		],
 		"name": "createBigPicture",
 		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{

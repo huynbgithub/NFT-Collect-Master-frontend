@@ -96,13 +96,13 @@ export default function Page() {
   return (
     <Card>
       <CardHeader className="p-5">
-        <div className="text-lg font-bold">SELL</div>
+        <div className="text-4xl font-bold">Selling NFTs</div>
       </CardHeader>
       <CardBody>
         {ownNFTs.map((nft) => (
           <div key={nft.nftAddress}>
-            <div className="text-xl font-bold"> {nft.nftName} </div>
-            <div className="grid grid-cols-6 gap-4 mt-6">
+            <div className="text-2xl text-teal-500 font-bold"> {nft.nftName} </div>
+            <div className="grid grid-cols-5 gap-4 mt-6">
               {nft.tokens.map((token) => (
                 <Card key={token.id} radius="lg">
                   <Image
@@ -112,12 +112,13 @@ export default function Page() {
                     src={buildIpfsUrl(token.image)}
                     width="100%"
                   />
+                  
                   <CardFooter>
                     <div className="grid gap-2 w-full">
-                      <div className="font-bold">#{Number(token.id)}</div>
-                      {token.tokenPrice.toString()}
+                    <div className="font-bold">#{Number(token.id)}</div>
+                      <div className="flex gap-2"><div className="text-teal-500 font-bold">Sell Price </div> <div>{calculateRedenomination(token.tokenPrice, 18,3)} KLAY</div></div>
                       {
-                        <Button color="warning" onPress={
+                        <Button onPress={
                           async () => {
                             if (web3 == null) return
                             const nftContract = new NFTContract(web3, account)
@@ -125,7 +126,7 @@ export default function Page() {
                             const receipt = await nftContract.purchaseToken(token.tokenId as bigint, token.tokenPrice, token.address as string)
                             console.log(receipt)
                           }
-                        } variant="bordered" className="w-full"> Purchase </Button>
+                        } className="w-full bg-teal-500 text-white text-base"> Purchase </Button>
                       }
 
                     </div>

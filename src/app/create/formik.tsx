@@ -83,7 +83,8 @@ const FormikProviders = ({ children }: { children: ReactNode }) => {
                         calculateIRedenomination(values.reward, 18)
                     )
 
-                    console.log(receipt)
+                    
+                    
                 }}
         >
             {(props) => _renderBody(props, children)}

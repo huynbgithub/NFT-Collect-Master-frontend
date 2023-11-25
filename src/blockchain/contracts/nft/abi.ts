@@ -32,7 +32,7 @@ const abi = [
 				"type": "address"
 			}
 		],
-		"stateMutability": "nonpayable",
+		"stateMutability": "payable",
 		"type": "constructor"
 	},
 	{
@@ -281,19 +281,6 @@ const abi = [
 		"anonymous": false,
 		"inputs": [
 			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			}
-		],
-		"name": "ReceiveCalled",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
 				"indexed": true,
 				"internalType": "address",
 				"name": "from",
@@ -380,6 +367,26 @@ const abi = [
 	},
 	{
 		"inputs": [],
+		"name": "claimReward",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "winnerAddress",
+				"type": "address"
+			}
+		],
+		"name": "endGame",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "factory",
 		"outputs": [
 			{
@@ -405,6 +412,19 @@ const abi = [
 				"internalType": "address",
 				"name": "",
 				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getOnGoingState",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
 			}
 		],
 		"stateMutability": "view",
@@ -450,31 +470,6 @@ const abi = [
 				"internalType": "struct BigPictureData",
 				"name": "",
 				"type": "tuple"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getSubmittedList",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "address",
-						"name": "owner",
-						"type": "address"
-					},
-					{
-						"internalType": "address[]",
-						"name": "tokenList",
-						"type": "address[]"
-					}
-				],
-				"internalType": "struct SubmittedInfo[]",
-				"name": "",
-				"type": "tuple[]"
 			}
 		],
 		"stateMutability": "view",
@@ -634,6 +629,19 @@ const abi = [
 				"internalType": "string",
 				"name": "",
 				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "onGoing",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
 			}
 		],
 		"stateMutability": "view",
@@ -876,50 +884,6 @@ const abi = [
 	{
 		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "submitList",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"components": [
-					{
-						"internalType": "address",
-						"name": "owner",
-						"type": "address"
-					},
-					{
-						"internalType": "address[]",
-						"name": "tokenList",
-						"type": "address[]"
-					}
-				],
-				"internalType": "struct SubmittedInfo",
-				"name": "submittedItem",
-				"type": "tuple"
-			}
-		],
-		"name": "submitTokens",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
 				"internalType": "bytes4",
 				"name": "interfaceId",
 				"type": "bytes4"
@@ -1004,19 +968,6 @@ const abi = [
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "winnerAddress",
-				"type": "address"
-			}
-		],
-		"name": "tranferRewardToWinner",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
 				"name": "from",
 				"type": "address"
 			},
@@ -1060,6 +1011,19 @@ const abi = [
 		"name": "unSell",
 		"outputs": [],
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "winner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{

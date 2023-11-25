@@ -70,10 +70,10 @@ export default function All(props: AllProps) {
   return (
     <Card  className="col-span-1">
       <CardHeader className="p-5">
-        <div className="text-lg font-bold">{game?.name}</div>
+        <div className="text-4xl font-bold">{game?.name}</div>
       </CardHeader>
       <CardBody>
-            <div className="grid grid-cols-3 gap-3 justify-center justify-items-center">
+            <div className="grid grid-cols-3 gap-4 justify-center justify-items-center">
               {game?.picturePieces.map((image, index) => (
                 <Image
                   isZoomed
@@ -85,12 +85,13 @@ export default function All(props: AllProps) {
                 />
               ))}
             </div>
-            <CardFooter className="p-0 mt-4 gap-4">
+            <CardFooter className="pt-12 px-0 mt-4 gap-4">
+            <div className="flex flex-col gap-4 w-full">
             <Button
-              className="w-full"
+              className="w-full border-teal-500 text-teal-500 text-base"
               type="submit"
+
               variant="bordered"
-              color="warning"
               onClick={async () => {
                 if (web3 == null) return;
                 if (account == null) return;
@@ -106,7 +107,7 @@ export default function All(props: AllProps) {
               Mint{" "}
             </Button>
             <Button
-              className="w-full"
+              className="w-full bg-teal-500 text-white text-base"
               type="submit"
               color="warning"
               onClick={async () => {
@@ -123,6 +124,7 @@ export default function All(props: AllProps) {
               {" "}
               Mint All{" "}
             </Button>
+            </div>
                     </CardFooter>
       </CardBody>
     </Card>

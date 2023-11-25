@@ -7,6 +7,7 @@ import {
   Link,
   Image,
   Button,
+  Divider,
 } from "@nextui-org/react";
 import React, { useState, useEffect } from "react";
 import { FactoryContract, NFTContract } from "../../blockchain/contracts";
@@ -20,11 +21,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { OwnToken } from "../../blockchain/contracts/nft";
 import SellModal from "./_components/SellModal";
+import { FaGamepad } from "react-icons/fa";
 
 export default function Page() {
-  const path = usePathname();
-  const router = useRouter();
-
   const web3 = useSelector((state: RootState) => state.blockchain.web3);
   const account = useSelector((state: RootState) => state.blockchain.account);
 
@@ -96,14 +95,16 @@ export default function Page() {
 
   return (
     <Card>
-      <CardHeader className="p-5">
-        <div className="text-lg font-bold">OWNED</div>
+      <CardHeader className=" p-5">
+        <div className="text-4xl font-bold">
+          Owned NFTs
+        </div>
       </CardHeader>
       <CardBody>
         {ownNFTs.map((nft) => (
           <div key={nft.nftAddress}>
-            <div className="text-xl font-bold"> {nft.nftName} </div>
-            <div className="grid grid-cols-6 gap-4 mt-6">
+            <div className="text-2xl font-bold text-teal-500 flex items-center gap-4"> {nft.nftName} </div>
+            <div className="grid grid-cols-4 gap-4 mt-6">
               {nft.tokens.map((token) => (
                 <Card key={token.id} radius="lg">
                   <Image
@@ -116,12 +117,12 @@ export default function Page() {
                   <CardFooter>
                     <div className="grid gap-2 w-full">
                       <div className="font-bold">#{Number(token.id)}</div>
-                      {token.tokenPrice.toString()}
+                      <div className="flex gap-2"><div className="text-teal-500 font-bold">Sell Price </div> <div>{calculateRedenomination(token.tokenPrice, 18,3)} KLAY</div></div>
                       {
                         !token.onSale ?
                           <SellModal address={token.address as string} id={token.tokenId as bigint} />
                           :
-                          <Button color="warning" variant="bordered" className="w-full"> Unsell </Button>
+                          <Button variant="bordered" className="w-full border-teal-500 text-base text-teal-500"> Unsell </Button>
                       }
 
                     </div>

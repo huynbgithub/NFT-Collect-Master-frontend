@@ -6,6 +6,8 @@ import { NextUIProvider, Spacer } from "@nextui-org/react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState, setAccount } from "@redux";
 import { useEffect } from "react";
+import { Fireworks } from "@fireworks-js/react"
+import { IconContext } from "react-icons";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,6 +36,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <NextUIProvider>
+          <Fireworks className="absolute h-screen w-screen"/>
           <AppNavbar />
           <Spacer y={12}/>
           <main className="max-w-[1024px] m-auto px-6">

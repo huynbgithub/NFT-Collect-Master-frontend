@@ -29,9 +29,9 @@ export default function Page() {
   const address = params.id as string;
 
   return (
-    <div className="grid grid-cols-3 gap-12">
+    <div className="grid grid-cols-2 gap-12">
       <All address={address}/>
-      <Assets/>
+      <Assets address={address}/>
     </div>
   );
 }

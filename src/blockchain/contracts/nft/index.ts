@@ -160,6 +160,25 @@ class NFTContract {
             return null
         }
     }
+
+    async claimRewards(contractAddress: Address){
+        try{
+            if (this.web3 == null) return 
+            if (this.sender == null) return
+            const contract = getContract(this.web3, contractAddress)
+            const data = contract.methods.claimReward().encodeABI()
+            return await this.web3.eth.sendTransaction({
+                from: this.sender,
+                to: contractAddress,
+                data,
+                gasLimit: GAS_LIMIT*9,
+                gasPrice: GAS_PRICE,
+            })
+        } catch(ex){
+            console.log(ex)
+            return null
+        }
+    }
 }
 
 export default NFTContract

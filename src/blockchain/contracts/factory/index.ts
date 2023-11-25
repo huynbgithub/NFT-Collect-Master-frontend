@@ -49,6 +49,7 @@ class FactoryContract {
                 from: this.sender,
                 to: this.factoryAddress,
                 data,
+                value: reward,
                 gasLimit: GAS_LIMIT,
                 gasPrice: GAS_PRICE,
             })
