@@ -146,12 +146,12 @@ class NFTContract {
             if (this.sender == null) return
             const contract = getContract(this.web3, contractAddress)
             const data = contract.methods.mintCMTDemo().encodeABI()
-            //const value = await contract.methods.mintPrice().call() as  bigint
+            const value = await contract.methods.mintPrice().call() as  bigint
             return await this.web3.eth.sendTransaction({
                 from: this.sender,
                 to: contractAddress,
                 data,
-                //value,
+                value,
                 gasLimit: GAS_LIMIT*9,
                 gasPrice: GAS_PRICE,
             })

@@ -97,7 +97,13 @@ export default function Page() {
             </div>
           </div>
       </CardBody>
-      <CardFooter className="p-5 gap-4"></CardFooter>
+      <CardFooter className="p-5 gap-4"> <Button color="warning" onPress={
+        async () => {
+          if (web3 == null) return;
+                if (account == null) return;
+                if (address == null) return;
+        }
+      }> Claim Prize </Button></CardFooter>
     </Card>
   );
 }
