@@ -23,7 +23,7 @@ const Navbar = () => {
             <NavbarContent>
                 <NavbarBrand>
                     {/* <AcmeLogo /> */}
-                    <p className="font-bold text-black">NFT Collect Master</p>
+                    <p className="font-bold text-teal-500">NFT Collect Master</p>
                 </NavbarBrand>
             </NavbarContent>
 

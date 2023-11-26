@@ -17,13 +17,13 @@ import { RootState } from "@redux";
 import { OwnToken } from "../../../../blockchain/contracts/nft";
 import {
   buildIpfsUrl,
-  getIpfsImageBlobUrl,
   getIpfsJson,
 } from "../../../../api/next";
 
 interface AssetsProps {
   address: string;
   count: number;
+  setCount: React.Dispatch<React.SetStateAction<number>>;
 }
 export default function Assets(props: AssetsProps) {
   const web3 = useSelector((state: RootState) => state.blockchain.web3);
@@ -33,7 +33,6 @@ export default function Assets(props: AssetsProps) {
   const [winner, setWinner] = useState<string | null>(null)
 
   useEffect(() => {
-    console.log("call");
     if (account == null) return;
     const handleEffect = async () => {
       if (web3 == null) return;
@@ -41,7 +40,6 @@ export default function Assets(props: AssetsProps) {
       const tokensData = await contract.getYourTokens(props.address);
       const gameState = await contract.getOnGoingState(props.address);
       setOnGoingState(gameState);
-      console.log("call22");
       const winnerAddress = await contract.getWinner(props.address);
       setWinner(winnerAddress);
 
@@ -53,7 +51,6 @@ export default function Assets(props: AssetsProps) {
       for (let i = 0; i < tokensData.length; i++) {
         const _data = tokensData[i];
         const promise = getIpfsJson(_data.image).then((_p) => {
-          console.log(_p);
           if (_p == null) return;
           const __p = _p as {
             index: number;
@@ -70,7 +67,6 @@ export default function Assets(props: AssetsProps) {
         promises.push(promise);
       }
       await Promise.all(promises);
-      console.log("call33");
 
       _tokensData.sort((prep, next) => Number(prep.tokenId - next.tokenId))
 
@@ -81,10 +77,24 @@ export default function Assets(props: AssetsProps) {
 
   return (
 
-    !onGoingState ? <>The game ended with the winner: {winner}</> :
+    !onGoingState
+      ?
+      <Card className="text-4xl font-bold">
+        <CardBody>
+          <div className="gap-6 items-center">
+            <div>
+              <div className="text-4xl font-bold text-teal-500 mt-10 mb-10 text-center"> The game ended. </div>
+              <div className="text-4xl font-bold text-red-600 mb-10 text-center"> Congratulation! </div>
+              <div className="text-4xl font-bold text-red-600 mb-10 text-center"> Winner: </div>
+              <div className="text-green-600 text-xl mb-10 text-center"> {winner} </div>
+            </div>
+          </div>
+        </CardBody>
+      </Card>
+      :
       <Card>
         <CardHeader className="p-5">
-          <div className="text-4xl font-bold">NFTs</div>
+          <div className="text-4xl font-bold">Your NFTs</div>
         </CardHeader>
         <CardBody>
           <div className="gap-4 flex">
@@ -126,6 +136,8 @@ export default function Assets(props: AssetsProps) {
               const contract = new NFTContract(web3, account);
               const receipt = await contract.claimRewards(address);
               console.log(receipt);
+
+              props.setCount(props.count + 1);
             }}
           >
             {" "}

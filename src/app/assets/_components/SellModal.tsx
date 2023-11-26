@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState } from "react";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Input } from "@nextui-org/react";
+import { Modal, ModalContent, ModalHeader, ModalBody, Button, useDisclosure, Input } from "@nextui-org/react";
 import { RootState } from "@redux";
 import { NFTContract } from "@blockchain";
 import { Address } from "web3";
@@ -8,7 +8,9 @@ import { calculateIRedenomination } from "../../../utils/math";
 
 interface SellModalProps {
   address: Address,
-  tokenId: bigint
+  tokenId: bigint,
+  count: number,
+  setCount: React.Dispatch<React.SetStateAction<number>>
 }
 
 export default function SellModal(props: SellModalProps) {
@@ -33,6 +35,7 @@ export default function SellModal(props: SellModalProps) {
                 const nftContract = new NFTContract(web3, account)
                 const receipt = await nftContract.putTokenOnSale(props.address, props.tokenId, calculateIRedenomination(tokenPrice, 18))
                 console.log(receipt)
+                props.setCount(props.count + 1)
               }
             }> Submit </Button>
           </ModalBody>

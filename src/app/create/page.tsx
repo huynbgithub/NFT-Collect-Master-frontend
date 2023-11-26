@@ -19,7 +19,7 @@ export default function Page() {
           <div className="grid grid-cols-2 gap-6 items-center">
             <BigImage />
             <div>
-              <div className="text-4xl font-bold"> Create Your NFT Game</div>
+              <div className="text-4xl font-bold text-teal-500 mb-10"> Create Your NFT Game</div>
               <InputFields />
             </div>
           </div>

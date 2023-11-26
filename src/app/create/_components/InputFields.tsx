@@ -8,7 +8,7 @@ export default function InputFields() {
   return (
     <div className="flex flex-col gap-4">
       <div className="mt-3">
-        <div className="font-bold text-teal-500"> Name </div>
+        <div className="font-bold text-orange-500"> Name </div>
         <Input
           variant="underlined"
           id="name"
@@ -19,7 +19,7 @@ export default function InputFields() {
 
       <div className="grid grid-cols-2 gap-6 mt-3">
         <div>
-          <div className="font-bold text-teal-500"> Mint Price </div>
+          <div className="font-bold text-orange-500"> Mint Price </div>
           <Input
             variant="underlined"
             title="Reward"
@@ -30,7 +30,7 @@ export default function InputFields() {
           />
         </div>
         <div>
-          <div className="font-bold text-teal-500"> Reward </div>
+          <div className="font-bold text-orange-500"> Reward </div>
           <Input
             variant="underlined"
             placeholder="Enter reward"

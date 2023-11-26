@@ -1,14 +1,11 @@
 "use client"
 import { Form, Formik, FormikProps } from "formik"
 import React, { ReactNode, createContext } from "react"
-import * as Yup from "yup"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
 import { FactoryContract } from "../../blockchain/contracts"
-import { uploadArrayBuffer, uploadImage } from "../../firebase/storage"
 import { pinataPOSTArrayBuffer, pinataPOSTFile, pinataPOSTJson } from "../../api"
 import { calculateIRedenomination } from "../../utils/math"
-import { useRouter } from "next/navigation"
 
 interface FormikValues {
     bigImage: File | null,
@@ -43,12 +40,6 @@ const _renderBody = (
 const FormikProviders = ({ children }: { children: ReactNode }) => {
     const web3 = useSelector((state: RootState) => state.blockchain.web3)
     const account = useSelector((state: RootState) => state.blockchain.account)
-
-
-    const router = useRouter()
-
-    const _pushList = () => router.push("/games")
-
     return (
         <Formik
             initialValues={initialValues}
@@ -88,9 +79,6 @@ const FormikProviders = ({ children }: { children: ReactNode }) => {
                         calculateIRedenomination(values.mintPrice, 18),
                         calculateIRedenomination(values.reward, 18)
                     )
-
-                    _pushList
-
                 }}
         >
             {(props) => _renderBody(props, children)}

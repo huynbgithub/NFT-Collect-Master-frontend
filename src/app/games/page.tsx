@@ -4,19 +4,14 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
-  Link,
   Image,
-  Button,
 } from "@nextui-org/react";
 import React, { useState, useEffect } from "react";
 import { FactoryContract } from "../../blockchain/contracts";
 import { usePathname, useRouter } from "next/navigation";
-import { NFT } from "../../blockchain/contracts/factory";
 import { calculateRedenomination } from "../../utils/math";
 import { getIpfsImageBlobUrl } from "../../api/next";
 import { Address } from "web3";
-import { GiTrophyCup } from "react-icons/gi";
-import { IoTicketOutline } from "react-icons/io5";
 
 export default function Page() {
   const path = usePathname();
@@ -34,7 +29,6 @@ export default function Page() {
     const _gamesData = await contract.getAll();
     if (_gamesData == null) return;
 
-    console.log(_gamesData);
     const _games: RenderNFT[] = [];
     const promises: Promise<void>[] = [];
     for (const data of _gamesData) {
@@ -58,7 +52,7 @@ export default function Page() {
   return (
     <Card>
       <CardHeader className="p-5">
-        <div className="text-4xl font-bold">Games</div>
+        <div className="text-4xl font-bold text-teal-500">Games</div>
       </CardHeader>
       <CardBody>
         <div className="grid grid-cols-4 gap-6">
@@ -67,7 +61,6 @@ export default function Page() {
               shadow="sm"
               key={key}
               isPressable
-              onPress={() => console.log("item pressed")}
             >
               <CardBody className="overflow-visible p-0">
                 <Image
@@ -91,7 +84,7 @@ export default function Page() {
                       </div>
                     </div>
                     <div className="flex gap-2 items-center mt-2">
-                    <div className="text-teal-500 font-bold">Reward</div>
+                      <div className="text-teal-500 font-bold">Reward</div>
                       <div>
                         {game.reward} KLAY
                       </div>

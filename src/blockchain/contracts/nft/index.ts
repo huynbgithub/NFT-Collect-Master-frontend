@@ -74,7 +74,8 @@ class NFTContract {
                 name: string;
                 image: string;
                 picturePieces: string[];
-                rewardPrice: number;
+                rewardPrice: bigint;
+                mintPrice: bigint;
             }>
         } catch(ex){
             console.log(ex)
