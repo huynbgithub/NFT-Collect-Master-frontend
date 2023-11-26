@@ -21,6 +21,8 @@ import All from "./_components/All";
 import Assets from "./_components/Assets";
 
 export default function Page() {
+  const [count, setCount] = useState(0);
+
   const web3 = useSelector((state: RootState) => state.blockchain.web3);
   const account = useSelector((state: RootState) => state.blockchain.account);
 
@@ -30,8 +32,8 @@ export default function Page() {
 
   return (
     <div className="grid grid-cols-2 gap-12">
-      <All address={address} />
-      <Assets address={address} />
+      <All address={address} count={count} setCount={setCount} />
+      <Assets address={address} count={count} />
     </div>
   );
 }

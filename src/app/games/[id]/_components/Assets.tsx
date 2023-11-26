@@ -23,6 +23,7 @@ import {
 
 interface AssetsProps {
   address: string;
+  count: number;
 }
 export default function Assets(props: AssetsProps) {
   const web3 = useSelector((state: RootState) => state.blockchain.web3);
@@ -32,6 +33,7 @@ export default function Assets(props: AssetsProps) {
   const [winner, setWinner] = useState<string | null>(null)
 
   useEffect(() => {
+    console.log("call");
     if (account == null) return;
     const handleEffect = async () => {
       if (web3 == null) return;
@@ -39,7 +41,7 @@ export default function Assets(props: AssetsProps) {
       const tokensData = await contract.getYourTokens(props.address);
       const gameState = await contract.getOnGoingState(props.address);
       setOnGoingState(gameState);
-
+      console.log("call22");
       const winnerAddress = await contract.getWinner(props.address);
       setWinner(winnerAddress);
 
@@ -68,11 +70,14 @@ export default function Assets(props: AssetsProps) {
         promises.push(promise);
       }
       await Promise.all(promises);
+      console.log("call33");
+
+      _tokensData.sort((prep, next) => Number(prep.tokenId - next.tokenId))
 
       setTokens(_tokensData);
     };
     handleEffect();
-  }, [account]);
+  }, [account, props.count]);
 
   return (
 
@@ -132,7 +137,7 @@ export default function Assets(props: AssetsProps) {
 }
 
 const isContainsAll = (tokens: OwnToken[]) => {
-  const _t = tokens.map((token) => Number(token.tokenId));
+  const _t = tokens.map((token) => Number(token.position));
   for (let i = 0; i < 9; i++) {
     if (!_t.includes(i)) {
       return false;

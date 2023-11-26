@@ -18,9 +18,12 @@ import { RootState } from "@redux";
 import { OwnToken } from "../../../../blockchain/contracts/nft";
 import { buildIpfsUrl, getIpfsImageBlobUrl, getIpfsJson } from "../../../../api/next";
 import { Address } from "web3";
+import { sleep } from "../../../../utils/others";
 
 interface AllProps {
   address: Address
+  count: number
+  setCount: React.Dispatch<React.SetStateAction<number>>
 }
 export default function All(props: AllProps) {
   const web3 = useSelector((state: RootState) => state.blockchain.web3);
@@ -112,6 +115,8 @@ export default function All(props: AllProps) {
                     const contract = new NFTContract(web3, account);
                     const receipt = await contract.mintCMT(address);
                     console.log(receipt);
+                    await sleep(5000);
+                    props.setCount(props.count + 1);
                   }}
                 >
                   {" "}
@@ -130,6 +135,7 @@ export default function All(props: AllProps) {
                     const contract = new NFTContract(web3, account);
                     const receipt = await contract.mintCMTDemo(address);
                     console.log(receipt);
+                    props.setCount(props.count + 1);
                   }}
                 >
                   {" "}
