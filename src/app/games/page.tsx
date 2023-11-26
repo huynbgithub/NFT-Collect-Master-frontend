@@ -33,7 +33,6 @@ export default function Page() {
     const promises: Promise<void>[] = [];
     for (const data of _gamesData) {
       const promise = getIpfsImageBlobUrl(data.image).then((url) => {
-        console.log(url);
         if (url == null) return;
         _games.push({
           imgUrl: url,

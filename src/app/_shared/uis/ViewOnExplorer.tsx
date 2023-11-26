@@ -1,9 +1,7 @@
 import React from "react"
 import { Link } from "@nextui-org/react"
-import { useSelector } from "react-redux"
-import { RootState } from "@redux"
 import { shortenAddress } from "@utils"
-import { KLAYTN_TESTNET_HTTP_RPC_URL } from "@blockchain"
+import { KLAYTN_TESTNET_EXPLORER } from "@blockchain"
 
 interface ViewOnExplorerProps {
   className?: string;
@@ -14,7 +12,7 @@ interface ViewOnExplorerProps {
 }
 
 const ViewOnExplorer = (props: ViewOnExplorerProps) => {
-    const explorerUrl = KLAYTN_TESTNET_HTTP_RPC_URL 
+    const explorerUrl = KLAYTN_TESTNET_EXPLORER 
     
     const _external = !props.notExternal
     const _middle = props.isTransaction ? "tx" : "address"

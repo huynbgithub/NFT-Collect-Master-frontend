@@ -30,14 +30,16 @@ export default function All(props: AllProps) {
   const [onGoingState, setOnGoingState] = useState<boolean | null>(null)
 
   useEffect(() => {
+
     const handleEffect = async () => {
-      if (web3 == null) return;
-      if (account == null) return;
-      const contract = new NFTContract(web3, account);
-      const gameData = await contract.getSingle(props.address);
-      if (gameData == null) return;
+      const contract = new NFTContract();
+
       const gameState = await contract.getOnGoingState(props.address);
       setOnGoingState(gameState);
+
+      const gameData = await contract.getSingle(props.address);
+      if (gameData == null) return;
+
       const pieces: { index: number; url: string }[] = [];
       const promises: Promise<void>[] = [];
       for (let i = 0; i < gameData.picturePieces.length; i++) {

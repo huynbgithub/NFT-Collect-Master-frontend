@@ -1,13 +1,11 @@
 "use client";
 import {
-  Input,
   Button,
   Spacer,
   Card,
   CardBody,
   CardFooter,
   CardHeader,
-  Link,
   Image,
 } from "@nextui-org/react";
 import React, { useState, useEffect } from "react";
@@ -34,15 +32,20 @@ export default function Assets(props: AssetsProps) {
   const [winner, setWinner] = useState<string | null>(null)
 
   useEffect(() => {
-    if (account == null) return;
+
+    const handleInfo = async () => {
+      const contractZ = new NFTContract();
+      const gameState = await contractZ.getOnGoingState(props.address);
+      setOnGoingState(gameState);
+      const winnerAddress = await contractZ.getWinner(props.address);
+      setWinner(winnerAddress);
+    }
+
     const handleEffect = async () => {
+      if (account == null) return;
       if (web3 == null) return;
       const contract = new NFTContract(web3, account);
       const tokensData = await contract.getYourTokens(props.address);
-      const gameState = await contract.getOnGoingState(props.address);
-      setOnGoingState(gameState);
-      const winnerAddress = await contract.getWinner(props.address);
-      setWinner(winnerAddress);
 
       if (tokensData == null) return;
 
@@ -73,6 +76,7 @@ export default function Assets(props: AssetsProps) {
 
       setTokens(_tokensData);
     };
+    handleInfo();
     handleEffect();
   }, [account, props.count]);
 
@@ -84,15 +88,15 @@ export default function Assets(props: AssetsProps) {
         <CardBody>
           <div className="flex flex-col items-center h-full">
             <div className=" flex flex-col items-center gap-6 justify-between h-full">
-              <div className="text-4xl font-bold text-teal-500 text-center"> The Game Ended </div>
+              <div className="text-4xl font-bold text-orange-500 text-center mt-10"> The Game Ended </div>
               <div className="flex flex-col items-center">
-              <Image alt="trophy" className="w-40 h-40" src="/trophy.svg"/>
-              <div className="flex gap-2 w-fit  mt-4">
-                <div className="font-bold text-base"> Winner: </div>
-                <ViewOnExplorer hexString={winner ?? ""} showShorten/>
+                <Image alt="trophy" className="w-40 h-40" src="/trophy.svg" />
+                <div className="flex gap-2 w-fit  mt-4">
+                  <div className="font-bold text-base text-teal-500"> Winner: </div>
+                  <ViewOnExplorer hexString={winner ?? ""} showShorten className="underline" />
+                </div>
               </div>
-              </div>
-              <Spacer y={0}/>
+              <Spacer y={0} />
             </div>
           </div>
         </CardBody>
