@@ -19,6 +19,7 @@ import {
   buildIpfsUrl,
   getIpfsJson,
 } from "../../../../api/next";
+import { ViewOnExplorer } from "../../../_shared";
 
 interface AssetsProps {
   address: string;
@@ -81,12 +82,17 @@ export default function Assets(props: AssetsProps) {
       ?
       <Card className="text-4xl font-bold">
         <CardBody>
-          <div className="gap-6 items-center">
-            <div>
-              <div className="text-4xl font-bold text-teal-500 mt-10 mb-10 text-center"> The game ended. </div>
-              <div className="text-4xl font-bold text-red-600 mb-10 text-center"> Congratulation! </div>
-              <div className="text-4xl font-bold text-red-600 mb-10 text-center"> Winner: </div>
-              <div className="text-green-600 text-xl mb-10 text-center"> {winner} </div>
+          <div className="flex flex-col items-center h-full">
+            <div className=" flex flex-col items-center gap-6 justify-between h-full">
+              <div className="text-4xl font-bold text-teal-500 text-center"> The Game Ended </div>
+              <div className="flex flex-col items-center">
+              <Image alt="trophy" className="w-40 h-40" src="/trophy.svg"/>
+              <div className="flex gap-2 w-fit  mt-4">
+                <div className="font-bold text-base"> Winner: </div>
+                <ViewOnExplorer hexString={winner ?? ""} showShorten/>
+              </div>
+              </div>
+              <Spacer y={0}/>
             </div>
           </div>
         </CardBody>
