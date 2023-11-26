@@ -12,7 +12,6 @@ import {
 } from "@nextui-org/react";
 import React, { useState, useEffect } from "react";
 import { NFTContract } from "../../../../blockchain/contracts";
-import { useParams } from "next/navigation";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux";
 import { OwnToken } from "../../../../blockchain/contracts/nft";
@@ -29,6 +28,8 @@ export default function Assets(props: AssetsProps) {
   const web3 = useSelector((state: RootState) => state.blockchain.web3);
   const account = useSelector((state: RootState) => state.blockchain.account);
   const [tokens, setTokens] = useState<OwnToken[]>([]);
+  const [onGoingState, setOnGoingState] = useState<boolean | null>(null)
+  const [winner, setWinner] = useState<string | null>(null)
 
   useEffect(() => {
     if (account == null) return;
@@ -36,7 +37,12 @@ export default function Assets(props: AssetsProps) {
       if (web3 == null) return;
       const contract = new NFTContract(web3, account);
       const tokensData = await contract.getYourTokens(props.address);
-      console.log(tokensData);
+      const gameState = await contract.getOnGoingState(props.address);
+      setOnGoingState(gameState);
+
+      const winnerAddress = await contract.getWinner(props.address);
+      setWinner(winnerAddress);
+
       if (tokensData == null) return;
 
       const _tokensData: OwnToken[] = [];
@@ -52,7 +58,8 @@ export default function Assets(props: AssetsProps) {
             url: string;
           };
           _tokensData.push({
-            id: BigInt(__p.index),
+            tokenId: _data.tokenId,
+            position: BigInt(__p.index),
             image: __p.url,
             onSale: _data.onSale,
             tokenPrice: _data.tokenPrice,
@@ -63,68 +70,69 @@ export default function Assets(props: AssetsProps) {
       await Promise.all(promises);
 
       setTokens(_tokensData);
-      console.log(_tokensData);
     };
     handleEffect();
   }, [account]);
 
   return (
-    <Card>
-      <CardHeader className="p-5">
-        <div className="text-4xl font-bold">NFTs</div>
-      </CardHeader>
-      <CardBody>
-        <div className="gap-4 flex">
-          <div className="grid grid-cols-4 gap-4">
-            {tokens &&
-              tokens.map((token) => (
-                <Card
-                  key={token.id}
-                  isFooterBlurred
-                  radius="lg"
-                  className="border-none"
-                >
-                  <Image
-                    alt="Woman listing to music"
-                    className="object-cover"
-                    height={300}
-                    src={buildIpfsUrl(token.image)}
-                    width="100%"
-                  />
-                  <CardFooter>
-                    <div>
-                      <div className="font-bold">#{Number(token.id)}</div>{" "}
-                    </div>
-                  </CardFooter>
-                </Card>
-              ))}
+
+    !onGoingState ? <>The game ended with the winner: {winner}</> :
+      <Card>
+        <CardHeader className="p-5">
+          <div className="text-4xl font-bold">NFTs</div>
+        </CardHeader>
+        <CardBody>
+          <div className="gap-4 flex">
+            <div className="grid grid-cols-4 gap-4">
+              {tokens &&
+                tokens.map((token) => (
+                  <Card
+                    key={token.tokenId}
+                    isFooterBlurred
+                    radius="lg"
+                    className="border-none"
+                  >
+                    <Image
+                      alt="Woman listing to music"
+                      className="object-cover"
+                      height={300}
+                      src={buildIpfsUrl(token.image)}
+                      width="100%"
+                    />
+                    <CardFooter>
+                      <div>
+                        <div className="font-bold">#{Number(token.position)}</div>{" "}
+                      </div>
+                    </CardFooter>
+                  </Card>
+                ))}
+            </div>
           </div>
-        </div>
-      </CardBody>
-      <CardFooter className="p-5 gap-4">
-        {" "}
-        <Button
-          isDisabled={!isContainsAll(tokens)}
-          className="bg-teal-500 text-base text-white w-full"
-          onPress={async () => {
-            if (web3 == null) return;
-            if (account == null) return;
-            const address = props.address;
-            const contract = new NFTContract(web3, account);
-            const receipt = await contract.claimRewards(address);
-            console.log(receipt);
-          }}
-        >
+        </CardBody>
+        <CardFooter className="p-5 gap-4">
           {" "}
-          Claim Prize{" "}
-        </Button>
-      </CardFooter>
-    </Card>
+          <Button
+            isDisabled={!isContainsAll(tokens)}
+            className="bg-teal-500 text-base text-white w-full"
+            onPress={async () => {
+              if (web3 == null) return;
+              if (account == null) return;
+              const address = props.address;
+              const contract = new NFTContract(web3, account);
+              const receipt = await contract.claimRewards(address);
+              console.log(receipt);
+            }}
+          >
+            {" "}
+            Claim Prize{" "}
+          </Button>
+        </CardFooter>
+      </Card>
   );
 }
 
 const isContainsAll = (tokens: OwnToken[]) => {
-  const _t = tokens.map((token) => Number(token.id));
+  const _t = tokens.map((token) => Number(token.tokenId));
   for (let i = 0; i < 9; i++) {
     if (!_t.includes(i)) {
       return false;

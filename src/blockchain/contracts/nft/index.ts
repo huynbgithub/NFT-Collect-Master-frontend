@@ -20,6 +20,51 @@ class NFTContract {
         this.web3 = web3
     }
 
+    async isOwner(contractAddress: Address){
+        try{
+            const web3 = getHttpWeb3()
+            const contract = getContract(web3, contractAddress)
+            if (this.sender == null) return null
+            return contract.methods.isOwner(this.sender).call()
+        } catch(ex){
+            console.log(ex)
+            return null
+        }
+    }    
+
+    async getOnGoingState(contractAddress: Address){
+        try{
+            const web3 = getHttpWeb3()
+            const contract = getContract(web3, contractAddress)
+            return contract.methods.getOnGoingState().call()
+        } catch(ex){
+            console.log(ex)
+            return null
+        }
+    }
+
+    async getWinner(contractAddress: Address){
+        try{
+            const web3 = getHttpWeb3()
+            const contract = getContract(web3, contractAddress)
+            return contract.methods.getWinner().call() 
+        } catch(ex){
+            console.log(ex)
+            return null
+        }
+    }
+
+    async getOwner(contractAddress: Address){
+        try{
+            const web3 = getHttpWeb3()
+            const contract = getContract(web3, contractAddress)
+            return contract.methods.getOwner().call()
+        } catch(ex){
+            console.log(ex)
+            return null
+        }
+    }
+
     async getSingle(contractAddress: Address){
         try{
             const web3 = getHttpWeb3()
@@ -43,13 +88,13 @@ class NFTContract {
             const contract = getContract(web3, contractAddress)
             if (this.sender == null) return null
             const _res = await contract.methods.getYourTokens(this.sender).call()
-            return _res.map(a => {
+            return _res.map(each => {
                 return {
-                    id: BigInt(a.id),
-                    image: a.image,
-                    onSale: a.onSale,
-                    tokenPrice: BigInt(a.tokenPrice)
-            }
+                    tokenId: BigInt(each.id),
+                    image: each.image,
+                    onSale: each.onSale,
+                    tokenPrice: BigInt(each.tokenPrice)
+                }
             })
         } catch(ex){
             console.log(ex)
@@ -63,13 +108,13 @@ class NFTContract {
             const contract = getContract(web3, contractAddress)
             if (this.sender == null) return null
             const _res = await contract.methods.getTokensOnSale(this.sender).call()
-            return _res.map(a => {
+            return _res.map(each => {
                 return {
-                    id: BigInt(a.id),
-                    image: a.image,
-                    onSale: a.onSale,
-                    tokenPrice: BigInt(a.tokenPrice)
-            }
+                    tokenId: BigInt(each.id),
+                    image: each.image,
+                    onSale: each.onSale,
+                    tokenPrice: BigInt(each.tokenPrice)
+                }
             })
         } catch(ex){
             console.log(ex)
@@ -140,6 +185,25 @@ class NFTContract {
         }
     }
 
+    async unSell(contractAddress: Address, tokenId: bigint){
+        try{
+            if (this.web3 == null) return 
+            if (this.sender == null) return
+            const contract = getContract(this.web3, contractAddress)
+            const data = contract.methods.unSell(tokenId).encodeABI()
+            return await this.web3.eth.sendTransaction({
+                from: this.sender,
+                to: contractAddress,
+                data,
+                gasLimit: GAS_LIMIT,
+                gasPrice: GAS_PRICE,
+            })
+        } catch(ex){
+            console.log(ex)
+            return null
+        }
+    }
+
     async mintCMTDemo(contractAddress: Address){
         try{
             if (this.web3 == null) return 
@@ -152,7 +216,7 @@ class NFTContract {
                 to: contractAddress,
                 data,
                 value,
-                gasLimit: GAS_LIMIT*9,
+                gasLimit: GAS_LIMIT,
                 gasPrice: GAS_PRICE,
             })
         } catch(ex){
@@ -171,7 +235,7 @@ class NFTContract {
                 from: this.sender,
                 to: contractAddress,
                 data,
-                gasLimit: GAS_LIMIT*9,
+                gasLimit: GAS_LIMIT,
                 gasPrice: GAS_PRICE,
             })
         } catch(ex){
@@ -184,8 +248,8 @@ class NFTContract {
 export default NFTContract
 
 export interface OwnToken {
-    id: bigint,
-    tokenId?: bigint,
+    tokenId: bigint,
+    position?: bigint,
     image: string,
     onSale: boolean,
     tokenPrice: bigint,

@@ -6,7 +6,12 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main>
+      <div className="min-h-[400px] grid content-center">
+        <div className="w-fit h-fit">
+          <div className="text-teal-500 text-8xl font-black">NFT Collect Master</div>
+        </div>
+      </div>
     </main>
   )
 }

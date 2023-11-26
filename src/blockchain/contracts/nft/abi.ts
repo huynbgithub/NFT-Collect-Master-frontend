@@ -432,6 +432,19 @@ const abi = [
 	},
 	{
 		"inputs": [],
+		"name": "getOwner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "getSingleBigPicture",
 		"outputs": [
 			{
@@ -517,6 +530,19 @@ const abi = [
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "getWinner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -584,6 +610,25 @@ const abi = [
 			}
 		],
 		"name": "isApprovedForAll",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "checkAddress",
+				"type": "address"
+			}
+		],
+		"name": "isOwner",
 		"outputs": [
 			{
 				"internalType": "bool",

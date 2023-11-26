@@ -19,18 +19,21 @@ import { OwnToken } from "../../../../blockchain/contracts/nft";
 import { buildIpfsUrl, getIpfsImageBlobUrl, getIpfsJson } from "../../../../api/next";
 import { Address } from "web3";
 
-interface AllProps{
-    address: Address
+interface AllProps {
+  address: Address
 }
 export default function All(props: AllProps) {
   const web3 = useSelector((state: RootState) => state.blockchain.web3);
   const account = useSelector((state: RootState) => state.blockchain.account);
 
   const [game, setGame] = useState<SingleItem | null>(null);
+  const [isOwner, setIsOwner] = useState<boolean | null>(null)
 
   useEffect(() => {
     const handleEffect = async () => {
-      const contract = new NFTContract();
+      if (web3 == null) return;
+      if (account == null) return;
+      const contract = new NFTContract(web3, account);
       const gameData = await contract.getSingle(props.address);
       if (gameData == null) return;
 
@@ -63,69 +66,79 @@ export default function All(props: AllProps) {
         picturePieces: pieces,
       };
       setGame(_game);
+
+      const isOwner = await contract.isOwner(props.address);
+      setIsOwner(isOwner);
     };
     handleEffect();
   }, []);
 
   return (
-    <Card  className="col-span-1">
+    <Card className="col-span-1">
       <CardHeader className="p-5">
         <div className="text-4xl font-bold">{game?.name}</div>
       </CardHeader>
       <CardBody>
-            <div className="grid grid-cols-3 gap-4 justify-center justify-items-center">
-              {game?.picturePieces.map((image, index) => (
-                <Image
-                  isZoomed
-                  radius="sm"
-                  className="w-full h-full"
-                  key={index}
-                  src={buildIpfsUrl(image.url)}
-                  alt="cutImage"
-                />
-              ))}
-            </div>
-            <CardFooter className="pt-12 px-0 mt-4 gap-4">
-            <div className="flex flex-col gap-4 w-full">
-            <Button
-              className="w-full border-teal-500 text-teal-500 text-base"
-              type="submit"
+        <div className="grid grid-cols-3 gap-4 justify-center justify-items-center">
+          {game?.picturePieces.map((image, index) => (
+            <Image
+              isZoomed
+              radius="sm"
+              className="w-full h-full"
+              key={index}
+              src={buildIpfsUrl(image.url)}
+              alt="cutImage"
+            />
+          ))}
+        </div>
+        <CardFooter className="pt-12 px-0 mt-4 gap-4">
+          <div className="flex flex-col gap-4 w-full">
+            {isOwner
+              ?
+              <div className="w-full border-teal-500 text-teal-500 text-base">Game creators cannot play!</div>
+              :
+              <>
+                <Button
+                  className="w-full border-teal-500 text-teal-500 text-base"
+                  type="submit"
 
-              variant="bordered"
-              onClick={async () => {
-                if (web3 == null) return;
-                if (account == null) return;
-                const address = props.address
-                console.log(address);
-                if (address == null) return;
-                const contract = new NFTContract(web3, account);
-                const receipt = await contract.mintCMT(address);
-                console.log(receipt);
-              }}
-            >
-              {" "}
-              Mint{" "}
-            </Button>
-            <Button
-              className="w-full bg-teal-500 text-white text-base"
-              type="submit"
-              color="warning"
-              onClick={async () => {
-                if (web3 == null) return;
-                if (account == null) return;
-                const address = props.address
-                console.log(address);
-                if (address == null) return;
-                const contract = new NFTContract(web3, account);
-                const receipt = await contract.mintCMTDemo(address);
-                console.log(receipt);
-              }}
-            >
-              {" "}
-              Mint All{" "}
-            </Button>
-            </div>
-                    </CardFooter>
+                  variant="bordered"
+                  onClick={async () => {
+                    if (web3 == null) return;
+                    if (account == null) return;
+                    const address = props.address
+                    console.log(address);
+                    if (address == null) return;
+                    const contract = new NFTContract(web3, account);
+                    const receipt = await contract.mintCMT(address);
+                    console.log(receipt);
+                  }}
+                >
+                  {" "}
+                  Mint{" "}
+                </Button>
+                <Button
+                  className="w-full bg-teal-500 text-white text-base"
+                  type="submit"
+                  color="warning"
+                  onClick={async () => {
+                    if (web3 == null) return;
+                    if (account == null) return;
+                    const address = props.address
+                    console.log(address);
+                    if (address == null) return;
+                    const contract = new NFTContract(web3, account);
+                    const receipt = await contract.mintCMTDemo(address);
+                    console.log(receipt);
+                  }}
+                >
+                  {" "}
+                  Mint All{" "}
+                </Button>
+              </>
+            }
+          </div>
+        </CardFooter>
       </CardBody>
     </Card>
   );

@@ -19,7 +19,7 @@ export default function InputFields() {
 
       <div className="grid grid-cols-2 gap-6 mt-3">
         <div>
-          <div className="font-bold text-teal-500"> Price </div>
+          <div className="font-bold text-teal-500"> Mint Price </div>
           <Input
             variant="underlined"
             title="Reward"
@@ -43,12 +43,12 @@ export default function InputFields() {
         </div>
       </div>
       <Button
-                type="submit"
-                className="bg-teal-500 text-base text-white w-full mt-3"
-              >
-                {" "}
-                Create{" "}
-              </Button>
+        type="submit"
+        className="bg-teal-500 text-base text-white w-full mt-3"
+      >
+        {" "}
+        Create{" "}
+      </Button>
     </div>
   );
 }

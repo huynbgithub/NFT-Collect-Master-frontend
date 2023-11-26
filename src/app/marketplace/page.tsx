@@ -10,7 +10,7 @@ import {
 } from "@nextui-org/react";
 import React, { useState, useEffect } from "react";
 import { FactoryContract, NFTContract } from "../../blockchain/contracts";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { NFT } from "../../blockchain/contracts/factory";
 import { calculateRedenomination } from "../../utils/math";
 import { buildIpfsUrl, getIpfsImageBlobUrl, getIpfsJson } from "../../api/next";
@@ -22,7 +22,6 @@ import { OwnToken } from "../../blockchain/contracts/nft";
 
 export default function Page() {
   const path = usePathname();
-  const router = useRouter();
 
   const web3 = useSelector((state: RootState) => state.blockchain.web3);
   const account = useSelector((state: RootState) => state.blockchain.account);
@@ -64,8 +63,8 @@ export default function Page() {
               };
 
               _ownedTokens.push({
-                tokenId: token.id,
-                id: BigInt(__p.index),
+                tokenId: token.tokenId,
+                position: BigInt(__p.index),
                 image: __p.url,
                 onSale: token.onSale,
                 tokenPrice: token.tokenPrice,
@@ -96,7 +95,7 @@ export default function Page() {
   return (
     <Card>
       <CardHeader className="p-5">
-        <div className="text-4xl font-bold">Selling NFTs</div>
+        <div className="text-4xl font-bold">NFT Marketplace</div>
       </CardHeader>
       <CardBody>
         {ownNFTs.map((nft) => (
@@ -104,7 +103,7 @@ export default function Page() {
             <div className="text-2xl text-teal-500 font-bold"> {nft.nftName} </div>
             <div className="grid grid-cols-5 gap-4 mt-6">
               {nft.tokens.map((token) => (
-                <Card key={token.id} radius="lg">
+                <Card key={token.tokenId} radius="lg">
                   <Image
                     alt="Woman listing to music"
                     className="object-cover"
@@ -112,11 +111,11 @@ export default function Page() {
                     src={buildIpfsUrl(token.image)}
                     width="100%"
                   />
-                  
+
                   <CardFooter>
                     <div className="grid gap-2 w-full">
-                    <div className="font-bold">#{Number(token.id)}</div>
-                      <div className="flex gap-2"><div className="text-teal-500 font-bold">Sell Price </div> <div>{calculateRedenomination(token.tokenPrice, 18,3)} KLAY</div></div>
+                      <div className="font-bold">#{Number(token.position)}</div>
+                      <div className="flex gap-2"><div className="text-teal-500 font-bold">Selling Price </div> <div>{calculateRedenomination(token.tokenPrice, 18, 3)} KLAY</div></div>
                       {
                         <Button onPress={
                           async () => {

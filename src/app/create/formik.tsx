@@ -8,6 +8,7 @@ import { FactoryContract } from "../../blockchain/contracts"
 import { uploadArrayBuffer, uploadImage } from "../../firebase/storage"
 import { pinataPOSTArrayBuffer, pinataPOSTFile, pinataPOSTJson } from "../../api"
 import { calculateIRedenomination } from "../../utils/math"
+import { useRouter } from "next/navigation"
 
 interface FormikValues {
     bigImage: File | null,
@@ -43,6 +44,11 @@ const FormikProviders = ({ children }: { children: ReactNode }) => {
     const web3 = useSelector((state: RootState) => state.blockchain.web3)
     const account = useSelector((state: RootState) => state.blockchain.account)
 
+
+    const router = useRouter()
+
+    const _pushList = () => router.push("/games")
+
     return (
         <Formik
             initialValues={initialValues}
@@ -61,20 +67,20 @@ const FormikProviders = ({ children }: { children: ReactNode }) => {
                     const cutImages = values.cutImages
                     const _urls: string[] = []
 
-                    const pinataPOSTArrayBufferPromises : Promise<void>[] = [] 
+                    const pinataPOSTArrayBufferPromises: Promise<void>[] = []
                     for (let i = 0; i < cutImages.length; i++) {
                         pinataPOSTArrayBufferPromises.push(pinataPOSTArrayBuffer(cutImages[i])
-                        .then(async (_cutImageRes) => {
-                            if (_cutImageRes == null) return 
-                            const data = {index: i, url: _cutImageRes.IpfsHash}
-                            const _res = await pinataPOSTJson(data)
-                            if (_res == null) return
-                            _urls.push(_res.IpfsHash)
-                        })
+                            .then(async (_cutImageRes) => {
+                                if (_cutImageRes == null) return
+                                const data = { index: i, url: _cutImageRes.IpfsHash }
+                                const _res = await pinataPOSTJson(data)
+                                if (_res == null) return
+                                _urls.push(_res.IpfsHash)
+                            })
                         )
                     }
                     await Promise.all(pinataPOSTArrayBufferPromises)
-                    
+
                     const receipt = await contract.createBigPicture(
                         values.name,
                         _bigPictureUrl,
@@ -83,8 +89,8 @@ const FormikProviders = ({ children }: { children: ReactNode }) => {
                         calculateIRedenomination(values.reward, 18)
                     )
 
-                    
-                    
+                    _pushList
+
                 }}
         >
             {(props) => _renderBody(props, children)}

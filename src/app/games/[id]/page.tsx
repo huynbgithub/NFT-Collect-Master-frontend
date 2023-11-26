@@ -30,8 +30,8 @@ export default function Page() {
 
   return (
     <div className="grid grid-cols-2 gap-12">
-      <All address={address}/>
-      <Assets address={address}/>
+      <All address={address} />
+      <Assets address={address} />
     </div>
   );
 }

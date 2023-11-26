@@ -64,8 +64,8 @@ export default function Page() {
               };
 
               _ownedTokens.push({
-                tokenId: token.id,
-                id: BigInt(__p.index),
+                tokenId: token.tokenId,
+                position: BigInt(__p.index),
                 image: __p.url,
                 onSale: token.onSale,
                 tokenPrice: token.tokenPrice,
@@ -97,7 +97,7 @@ export default function Page() {
     <Card>
       <CardHeader className=" p-5">
         <div className="text-4xl font-bold">
-          Owned NFTs
+          Your NFTs
         </div>
       </CardHeader>
       <CardBody>
@@ -106,7 +106,7 @@ export default function Page() {
             <div className="text-2xl font-bold text-teal-500 flex items-center gap-4"> {nft.nftName} </div>
             <div className="grid grid-cols-4 gap-4 mt-6">
               {nft.tokens.map((token) => (
-                <Card key={token.id} radius="lg">
+                <Card key={token.tokenId} radius="lg">
                   <Image
                     alt="Woman listing to music"
                     className="object-cover"
@@ -116,11 +116,11 @@ export default function Page() {
                   />
                   <CardFooter>
                     <div className="grid gap-2 w-full">
-                      <div className="font-bold">#{Number(token.id)}</div>
-                      <div className="flex gap-2"><div className="text-teal-500 font-bold">Sell Price </div> <div>{calculateRedenomination(token.tokenPrice, 18,3)} KLAY</div></div>
+                      <div className="font-bold">#{Number(token.position)}</div>
+                      <div className="flex gap-2"><div className="text-teal-500 font-bold"> Price </div> <div>{calculateRedenomination(token.tokenPrice, 18, 3)} KLAY</div></div>
                       {
                         !token.onSale ?
-                          <SellModal address={token.address as string} id={token.tokenId as bigint} />
+                          <SellModal address={token.address as string} tokenId={token.tokenId as bigint} />
                           :
                           <Button variant="bordered" className="w-full border-teal-500 text-base text-teal-500"> Unsell </Button>
                       }

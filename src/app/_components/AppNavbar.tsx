@@ -15,14 +15,14 @@ const Navbar = () => {
 
     const _pushCreate = () => router.push("/create")
     const _pushList = () => router.push("/games")
-    const _pushOwned = () => router.push("/owned")
-    const _pushSell = () => router.push("/sell")
+    const _pushAssets = () => router.push("/assets")
+    const _pushMarketplace = () => router.push("/marketplace")
 
     return (
         <NextUINavbar shouldHideOnScroll isBordered>
             <NavbarContent>
                 <NavbarBrand>
-                    <AcmeLogo />
+                    {/* <AcmeLogo /> */}
                     <p className="font-bold text-black">NFT Collect Master</p>
                 </NavbarBrand>
             </NavbarContent>
@@ -39,13 +39,13 @@ const Navbar = () => {
                     </Link>
                 </NavbarItem>
                 <NavbarItem>
-                    <Link color="foreground" className="cursor-pointer" onPress={_pushOwned}>
-                        Owned
+                    <Link color="foreground" className="cursor-pointer" onPress={_pushAssets}>
+                        Assets
                     </Link>
                 </NavbarItem>
                 <NavbarItem>
-                    <Link color="foreground" className="cursor-pointer" onPress={_pushSell}>
-                        Sell
+                    <Link color="foreground" className="cursor-pointer" onPress={_pushMarketplace}>
+                        Marketplace
                     </Link>
                 </NavbarItem>
             </NavbarContent>
