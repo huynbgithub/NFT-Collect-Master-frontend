@@ -31,6 +31,14 @@ export default function All(props: AllProps) {
 
   useEffect(() => {
 
+    const handleConnectInfo = async () => {
+      if (web3 == null) return;
+      if (account == null) return;
+      const contract = new NFTContract(web3, account);
+      const isOwner = await contract.isOwner(props.address);
+      setIsOwner(isOwner);
+    }
+
     const handleEffect = async () => {
       const contract = new NFTContract();
 
@@ -70,11 +78,9 @@ export default function All(props: AllProps) {
         picturePieces: pieces,
       };
       setGame(_game);
-
-      const isOwner = await contract.isOwner(props.address);
-      setIsOwner(isOwner);
     };
     handleEffect();
+    handleConnectInfo();
   }, [account, props.count]);
 
   return (
