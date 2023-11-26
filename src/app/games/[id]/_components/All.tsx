@@ -153,7 +153,7 @@ export default function All(props: AllProps) {
                     }}
                   >
                     {" "}
-                    Mint All{" "}
+                    Mint All For Demo{" "}
                   </Button>
                 </>
               )}
