@@ -95,7 +95,7 @@ export default function All(props: AllProps) {
             />
           ))}
         </div>
-        <CardFooter className="pt-12 px-0 gap-4">
+        <CardFooter className="px-0 gap-4 mt-1">
           <div className="flex flex-col gap-4 w-full">
             <div className="grid grid-cols-2 ml-10">
               <div className="flex gap-2 items-center">
